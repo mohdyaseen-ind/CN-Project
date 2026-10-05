@@ -13,7 +13,7 @@ Team: Prateek, Sankalp, Yaseen, Sarthak Mathapati
 
 ## Request flow
 
-Client -> DNS (Mac 1) -> app.team1.test resolves to Mac 2 -> HTTPS/nginx (Mac 2)
+Client -> DNS (Mac 1) -> app.team1.test resolves to Mac 2 -> HTTPS/nginx (Mac 2)  
 -> Backend A (Mac 3) OR Backend B (Mac 4)
 
 ## Folder map
@@ -34,7 +34,7 @@ Client -> DNS (Mac 1) -> app.team1.test resolves to Mac 2 -> HTTPS/nginx (Mac 2)
 
 ## Important
 
-Replace placeholders such as `MAC1_IP`, `MAC2_IP`, `MAC3_IP`, and `MAC4_IP`
+Replace placeholders such as `MAC1_IP`, `MAC2_IP`, `MAC3_IP`, and `MAC4_IP`  
 with the team's real LAN IPs before running the configuration.
 
 Use a `.test` domain, not `.local`.
@@ -55,6 +55,7 @@ Phase 1 should be completed in this order:
 
 ## Network Topology
 
+```text
             Sankalp
         Private DNS
          10.7.26.113
@@ -75,3 +76,4 @@ Phase 1 should be completed in this order:
       Yaseen      Sarthak
     Backend A    Backend B
       :3001        :3002
+```
