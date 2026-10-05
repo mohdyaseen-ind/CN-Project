@@ -4,12 +4,12 @@ Team: Prateek, Sankalp, Yaseen, Sarthak Mathapati
 
 ## Machine roles
 
-| Mac | Member | Role | Main service |
-|---|---|---|---|
-| Mac 1 | Sankalp | Private DNS + Wireshark | dnsmasq / UDP 53 |
-| Mac 2 | Prateek | Edge / Reverse Proxy / Load Balancer | nginx / HTTPS 443 |
-| Mac 3 | Yaseen | Backend A | Python / TCP 3001 |
-| Mac 4 | Sarthak Mathapati | Backend B + Test Client | Python / TCP 3002 |
+| Mac   | Member            | Role                                 | Main service      |
+| ----- | ----------------- | ------------------------------------ | ----------------- |
+| Mac 1 | Sankalp           | Private DNS + Wireshark              | dnsmasq / UDP 53  |
+| Mac 2 | Prateek           | Edge / Reverse Proxy / Load Balancer | nginx / HTTPS 443 |
+| Mac 3 | Yaseen            | Backend A                            | Python / TCP 3001 |
+| Mac 4 | Sarthak Mathapati | Backend B + Test Client              | Python / TCP 3002 |
 
 ## Request flow
 
@@ -42,6 +42,7 @@ Use a `.test` domain, not `.local`.
 Do NOT share or commit private TLS keys (`*.key`) to GitHub or the team chat.
 
 Phase 1 should be completed in this order:
+
 1. LAN connectivity and fixed/reserved IPs
 2. Private DNS
 3. Backend A and B
@@ -51,3 +52,27 @@ Phase 1 should be completed in this order:
 7. Wireshark capture
 8. Failure demonstrations
 9. Evidence + dry run
+
+## Network Topology
+
+```text
+            Sankalp
+        Private DNS
+         10.7.26.113
+              |
+              | app.team1.test
+              ↓
+               Mac 2
+             Prateek
+        nginx + HTTPS/TLS
+          10.7.7.3
+              |
+         Load Balancer
+           /       \
+          /         \
+         ↓           ↓
+
+    Mac 3 Mac 4
+    Yaseen Sarthak
+    Backend A Backend B
+    :3001 :3002
