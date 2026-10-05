@@ -1,6 +1,6 @@
 # Computer Networks Project — Phase 1
 
-Team: Prateek, Sankalp, Yaseen, Mathapati/Sarthak
+Team: Prateek, Sankalp, Yaseen, Sarthak Mathapati
 
 ## Machine roles
 
@@ -9,7 +9,7 @@ Team: Prateek, Sankalp, Yaseen, Mathapati/Sarthak
 | Mac 1 | Sankalp | Private DNS + Wireshark | dnsmasq / UDP 53 |
 | Mac 2 | Prateek | Edge / Reverse Proxy / Load Balancer | nginx / HTTPS 443 |
 | Mac 3 | Yaseen | Backend A | Python / TCP 3001 |
-| Mac 4 | Mathapati/Sarthak | Backend B + Test Client | Python / TCP 3002 |
+| Mac 4 | Sarthak Mathapati | Backend B + Test Client | Python / TCP 3002 |
 
 ## Request flow
 
