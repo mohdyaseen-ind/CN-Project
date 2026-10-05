@@ -55,16 +55,15 @@ Phase 1 should be completed in this order:
 
 ## Network Topology
 
-```text
             Sankalp
         Private DNS
          10.7.26.113
               |
               | app.team1.test
               ↓
-               Mac 2
-             Prateek
-        nginx + HTTPS/TLS
+             Mac 2
+            Prateek
+       nginx + HTTPS/TLS
           10.7.7.3
               |
          Load Balancer
@@ -72,7 +71,7 @@ Phase 1 should be completed in this order:
           /         \
          ↓           ↓
 
-    Mac 3 Mac 4
-    Yaseen Sarthak
-    Backend A Backend B
-    :3001 :3002
+      Mac 3       Mac 4
+      Yaseen      Sarthak
+    Backend A    Backend B
+      :3001        :3002
