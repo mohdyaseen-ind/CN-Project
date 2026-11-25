@@ -1,0 +1,8 @@
+Project main-edge config validation on Prateek host (not started here)
+2026-11-25 23:35:01 IST
+2026/11/25 23:35:01 [emerg] 62595#0: cannot load certificate "/Users/prateekshakya/Desktop/CN-Project/configs/edge/edge/certs/app.crt": BIO_new_file() failed (SSL: error:80000002:system library::No such file or directory:calling fopen(/Users/prateekshakya/Desktop/CN-Project/configs/edge/edge/certs/app.crt, r) error:10000080:BIO routines::no such file)
+nginx: configuration file /Users/prateekshakya/Desktop/CN-Project/configs/edge/nginx.conf test failed
+
+Upstream TCP reachability from this host
+10.7.28.39:3001 Connection to 10.7.28.39 port 3001 [tcp/redwood-broker] succeeded!
+10.7.18.197:3002 Connection to 10.7.18.197 port 3002 [tcp/exlm-agent] succeeded!

@@ -14,25 +14,31 @@
   app.team1.test / api.team1.test -> 10.7.26.113 (current intended edge)
 ```
 
-Both names currently point at Sankalp's main nginx. It load-balances between
-Backend A at `10.7.28.39:3001` and Backend B at
-`10.7.18.197:3002`. Prateek's standby nginx uses the same upstreams but
-listens on HTTP `8080` and HTTPS `8443`; the HTTP listener redirects to HTTPS.
+The primary DNS currently points both names at the intended Sankalp edge,
+`10.7.26.113`. The host responds to ping and its TCP ports 8080/8443 are now
+open. HTTP redirects to HTTPS. The presented main-edge certificate is
+self-signed and not yet trusted by Prateek's client, so the main-edge HTTP
+response/upstream path is not yet verified. Its configured upstream pool is
+Backend A at `10.7.28.39:3001` and Backend B at `10.7.18.197:3002`. Prateek's
+standby nginx uses the same upstreams and has been verified on HTTP `8080` and
+HTTPS `8443`; HTTP redirects to HTTPS.
 
 Prateek's `en0` address, `/20` mask, gateway, and primary DNS service were
-checked locally. The other addresses are the team's assigned values and have
-not been independently confirmed from those laptops in this session. Current
-peer service connection attempts timed out; see the Phase 2 report.
+checked locally. Sarthak's latest report records `en0` as `10.7.18.197/19`
+with gateway `10.7.0.1`; this differs from the expected `/20` and needs team
+confirmation. Sankalp's host was pingable, but its interface/mask were not
+independently checked from that laptop.
 
 ## Service matrix
 
 | Service | Host | Address/port | State |
 |---|---|---|---|
 | Primary DNS | Prateek | `10.7.28.39:53` UDP/TCP | Running; local DNS queries verified |
-| Main edge | Sankalp | `10.7.26.113:8080/8443` | Peer not reachable from this Mac during audit |
+| Main edge | Sankalp | `10.7.26.113:8080/8443` | TCP open; HTTP redirects; HTTPS cert is self-signed and not yet trusted by Prateek |
 | Backend A | Prateek | `10.7.28.39:3001` | Managed by project scripts |
-| Backend B | Sarthak | `10.7.18.197:3002` | Peer not reachable from this Mac during audit |
-| Backup DNS | Sarthak | `10.7.18.197:53` UDP/TCP | Query timed out during audit |
-| Standby edge | Prateek | `10.7.28.39:8080/8443` | Project-local nginx config |
+| Backend B | Sarthak | `10.7.18.197:3002` | Remote HTTP 200 / `X-Backend: B`; standby pool alternates A/B |
+| Backup DNS | Sarthak | `10.7.18.197:53` UDP/TCP | UDP times out; TCP connection resets from Prateek |
+| Standby edge | Prateek | `10.7.28.39:8080/8443` | Local HTTPS works; `X-Edge: standby` |
 
-No DNS cutover or coordinated failover should be inferred from this diagram.
+No DNS cutover or coordinated failure test should be inferred from this diagram.
+See the follow-up audit logs in `evidence/phase2/prateek/logs/`.

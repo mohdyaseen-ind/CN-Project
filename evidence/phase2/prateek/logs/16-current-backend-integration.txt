@@ -1,0 +1,32 @@
+Current Backend B direct and standby-upstream verification
+2026-11-25 23:32:32 IST
+
+Direct Backend B /api/status
+HTTP/1.1 200 OK
+Server: BaseHTTP/0.6 Python/3.14.2
+Date: Wed, 25 Nov 2026 18:02:32 GMT
+X-Backend: B
+Cache-Control: no-store
+Content-Type: application/json
+Content-Length: 102
+
+{"backend": "B", "status": "ok", "host": "skensmac.local", "time": "2026-11-25T18:02:32.104129+00:00"}
+Standby HTTPS responses through upstream pool (six requests)
+request 1: HTTP/2 200
+x-backend: A
+x-edge: standby
+request 2: HTTP/2 200
+x-backend: B
+x-edge: standby
+request 3: HTTP/2 200
+x-backend: A
+x-edge: standby
+request 4: HTTP/2 200
+x-backend: B
+x-edge: standby
+request 5: HTTP/2 200
+x-backend: A
+x-edge: standby
+request 6: HTTP/2 200
+x-backend: B
+x-edge: standby

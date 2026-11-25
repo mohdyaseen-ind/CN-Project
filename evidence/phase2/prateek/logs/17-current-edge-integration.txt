@@ -1,0 +1,20 @@
+Main edge connectivity and local standby HTTP/TLS checks
+2026-11-25 23:32:32 IST
+
+Main edge port 8080
+nc: connectx to 10.7.26.113 port 8080 (tcp) failed: Connection refused
+
+Main edge port 8443
+nc: connectx to 10.7.26.113 port 8443 (tcp) failed: Connection refused
+
+Standby HTTP redirect
+HTTP/1.1 301 Moved Permanently
+Location: https://app.team1.test:8443/
+X-Edge: standby
+
+Local TLS certificate summary
+subject=CN=app.team1.test
+notBefore=Oct  5 06:37:45 2026 GMT
+notAfter=Oct  5 06:37:45 2027 GMT
+X509v3 Subject Alternative Name:
+    DNS:app.team1.test, DNS:api.team1.test

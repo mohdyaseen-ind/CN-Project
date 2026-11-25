@@ -1,0 +1,19 @@
+Homebrew nginx binary versus active standby process
+2026-11-25 23:37:43 IST
+
+Installed package/current executable
+nginx 1.31.10
+nginx version: nginx/1.31.10
+
+Active standby master
+49104 Wed Nov 25 20:50:06 2026     nginx: master process /opt/homebrew/opt/nginx/bin/nginx -e stderr -p /Users/prateekshakya/Desktop/CN-Project/ -c configs/edge/nginx-standby.conf
+
+Active standby HTTP response
+HTTP/2 200
+server: nginx/1.31.6
+date: Wed, 25 Nov 2026 18:07:43 GMT
+content-type: application/json
+content-length: 102
+x-backend: B
+cache-control: no-store
+x-edge: standby

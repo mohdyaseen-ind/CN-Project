@@ -11,14 +11,17 @@ Course project for Phase 1 and the applicable Phase 2 extensions.
 | Sarthak | `10.7.18.197` | Backup DNS, Backend B (`:3002`), test client and Wireshark |
 
 The expected subnet is `10.7.16.0/20`, interface `en0`, DNS port `53` TCP/UDP,
-and DNS TTL `30` seconds. These addresses are the team-provided assignments;
-only Prateek's current address and interface have been checked from this Mac.
-See [docs/IP-INVENTORY.md](docs/IP-INVENTORY.md) for measured versus assigned
+and DNS TTL `30` seconds. Prateek's interface/address/mask were checked on this
+Mac. Sarthak's report records `10.7.18.197/19`, which differs from the expected
+`/20`; Sankalp's host mask is still unverified. See
+[docs/IP-INVENTORY.md](docs/IP-INVENTORY.md) for measured versus assigned
 network facts and current verification limits.
 
-Both `app.team1.test` and `api.team1.test` currently resolve to Sankalp's main
-edge (`10.7.26.113`). Do not change either DNS server to the standby edge or
-stop primary DNS during the coordinated demonstrations without team approval.
+The primary currently resolves both `app.team1.test` and `api.team1.test` to
+Sankalp's intended main edge (`10.7.26.113`). Backup DNS remote queries are
+currently failing from Prateek's host. Do not change either DNS server to the
+standby edge or stop primary DNS during coordinated demonstrations without team
+approval.
 
 ## Prateek: local launch and checks
 
@@ -36,11 +39,34 @@ state/log files under `var/`, which is git-ignored.
 After editing the standby configuration, run `./scripts/standby-nginx.sh reload`
 to validate it and gracefully reload only the project-managed nginx process.
 
+## Sankalp: main-edge launch
+
+On Sankalp's Mac only, install nginx through the authorized Homebrew setup if
+needed, verify both configured upstreams, then use the project-specific
+lifecycle script. Do not start the default Homebrew nginx service.
+
+```sh
+./scripts/edge-nginx.sh upstreams
+./scripts/edge-nginx.sh config-test
+./scripts/edge-nginx.sh start
+./scripts/edge-nginx.sh status
+./scripts/edge-nginx.sh probe
+```
+
+`probe` makes six ordinary HTTPS status requests and prints their
+`X-Backend` values. Generate or provision the main-edge certificate/key locally using
+`bash configs/tls/gen-cert.sh`; never copy a private key between hosts. Set
+`EDGE_CA_FILE=/path/to/approved/ca.crt` if the public trust certificate is not
+available at the script's documented default paths.
+Use `reload` and `stop` only for this project-managed main-edge process.
+
 Backend A serves `/`, `/api/status`, and `/api/catalog`. The catalog returns
 `Cache-Control` and `ETag` and responds `304 Not Modified` when passed its
 `If-None-Match` value. Keep Backend A running for Sankalp's integration work.
 The standby proxy uses the existing local certificate if available and does
-not replace Homebrew's global nginx configuration.
+not replace Homebrew's global nginx configuration. Homebrew nginx was upgraded
+to 1.31.10, while the active standby process still reports 1.31.6; coordinate
+before restarting it so Sankalp's integration is not interrupted.
 
 ```sh
 ./scripts/standby-nginx.sh stop
@@ -59,6 +85,8 @@ for an availability demonstration until Sankalp has acknowledged the test.
   backup DNS template.
 - [configs/edge/nginx.conf](configs/edge/nginx.conf): Sankalp's main-edge
   template with both assigned backend addresses.
+- [scripts/edge-nginx.sh](scripts/edge-nginx.sh): project-specific main-edge
+  validation, lifecycle, upstream, and load-balancing checks for Sankalp.
 - [configs/edge/nginx-standby.conf](configs/edge/nginx-standby.conf): standalone
   standby proxy on ports 8080/8443.
 - [docs/phase2/tls-setup.md](docs/phase2/tls-setup.md): local certificate setup,

@@ -1,0 +1,55 @@
+Current non-disruptive integration audit
+2026-11-25 23:32:32 IST
+
+Primary DNS UDP app/api
+
+; <<>> DiG 9.10.6 <<>> +time=2 +tries=1 @10.7.28.39 app.team1.test A +noall +answer +comments
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 14023
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; ANSWER SECTION:
+app.team1.test.		30	IN	A	10.7.26.113
+
+
+; <<>> DiG 9.10.6 <<>> +time=2 +tries=1 @10.7.28.39 api.team1.test A +noall +answer +comments
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 54714
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; ANSWER SECTION:
+api.team1.test.		30	IN	A	10.7.26.113
+
+
+Primary DNS TCP api
+
+; <<>> DiG 9.10.6 <<>> +tcp +time=2 +tries=1 @10.7.28.39 api.team1.test A +noall +answer +comments
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 20714
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; ANSWER SECTION:
+api.team1.test.		30	IN	A	10.7.26.113
+
+
+Backup DNS UDP
+
+; <<>> DiG 9.10.6 <<>> +time=2 +tries=1 @10.7.18.197 app.team1.test A +noall +answer +comments
+; (1 server found)
+;; global options: +cmd
+;; connection timed out; no servers could be reached
+
+Backup DNS TCP
+;; communications error to 10.7.18.197#53: connection reset

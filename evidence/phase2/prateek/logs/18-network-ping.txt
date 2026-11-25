@@ -1,0 +1,26 @@
+Current host identity and peer ping
+2026-11-25 23:34:23 IST
+
+Prateek local interface and route
+10.7.28.39
+	inet 10.7.28.39 netmask 0xffffe000 broadcast 10.7.31.255
+    gateway: 10.7.0.1
+  interface: en0
+
+Sankalp 10.7.26.113
+PING 10.7.26.113 (10.7.26.113): 56 data bytes
+64 bytes from 10.7.26.113: icmp_seq=0 ttl=64 time=6.243 ms
+64 bytes from 10.7.26.113: icmp_seq=1 ttl=64 time=6.722 ms
+
+--- 10.7.26.113 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 6.243/6.482/6.722/0.240 ms
+
+Sarthak 10.7.18.197
+PING 10.7.18.197 (10.7.18.197): 56 data bytes
+64 bytes from 10.7.18.197: icmp_seq=0 ttl=64 time=7.081 ms
+64 bytes from 10.7.18.197: icmp_seq=1 ttl=64 time=8.500 ms
+
+--- 10.7.18.197 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 7.081/7.790/8.500/0.710 ms

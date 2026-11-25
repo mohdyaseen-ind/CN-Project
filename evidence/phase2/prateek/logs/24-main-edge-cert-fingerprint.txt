@@ -1,0 +1,13 @@
+Main-edge presented certificate metadata (public certificate only)
+2026-11-25 23:40:31 IST
+subject=CN=app.team1.test
+issuer=CN=app.team1.test
+notBefore=Nov 25 16:46:16 2026 GMT
+notAfter=Nov 25 16:46:16 2027 GMT
+X509v3 Subject Alternative Name:
+    DNS:app.team1.test, DNS:api.team1.test
+sha256 Fingerprint=EB:D8:CA:D7:CB:4E:87:EB:5A:2A:F8:41:10:8B:EA:5D:F6:C0:DA:7A:C8:D9:9F:82:FA:10:AC:C3:D6:71:FC:32
+
+Prateek local CA certificate fingerprint (for comparison)
+subject=CN=Team1 Local CA
+sha256 Fingerprint=B6:CA:E7:D5:6A:68:3E:8B:93:0C:92:6A:42:E4:B6:97:1C:E5:98:32:11:A5:68:43:E0:3A:0E:7B:EF:A5:F9:6C

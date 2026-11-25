@@ -1,0 +1,26 @@
+Main-edge live integration from Prateek
+2026-11-25 23:39:15 IST
+
+TCP listeners
+Connection to 10.7.26.113 port 8080 [tcp/http-alt] succeeded!
+Connection to 10.7.26.113 port 8443 [tcp/pcsync-https] succeeded!
+
+HTTPS app status, CA verification, no -k
+curl: (60) SSL certificate problem: self signed certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+
+HTTPS api status, CA verification, no -k
+curl: (60) SSL certificate problem: self signed certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+
+HTTP redirect and X-Edge absence/presence
+HTTP/1.1 301 Moved Permanently
+Location: https://app.team1.test:8443/

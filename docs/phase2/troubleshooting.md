@@ -62,6 +62,19 @@ openssl s_client -connect 10.7.28.39:8443 -servername api.team1.test \
   -CAfile edge/certs/ca.crt -verify_return_error
 ```
 
+For Sankalp's main edge, first verify the self-signed certificate fingerprint
+out of band with Sankalp, then use the approved public certificate as the trust
+file:
+
+```sh
+openssl s_client -connect 10.7.26.113:8443 -servername app.team1.test \
+  -CAfile /path/to/confirmed-main-edge.crt -verify_return_error
+```
+
+Prateek observed a self-signed main-edge certificate with both expected SANs,
+but it does not chain to Prateek's current Team1 CA. Do not treat the
+network-fetched fingerprint as trusted until Sankalp confirms it independently.
+
 Use the approved public CA/certificate trust bundle on client machines. Never
 copy a `.key` file or `ca.key` to another host or the repository.
 If the approved certificate is self-signed rather than CA-issued, use its
@@ -75,6 +88,9 @@ curl -i --resolve app.team1.test:8443:10.7.28.39 \
 curl -i --resolve app.team1.test:8443:10.7.28.39 \
   --cacert edge/certs/ca.crt https://app.team1.test:8443/api/catalog
 ```
+
+For the main edge, substitute `10.7.26.113` and the confirmed public
+certificate path; do not use `-k`.
 
 Record the status, `X-Edge`, `X-Backend`, cache headers, and body. For a
 conditional request, copy the exact ETag from `/api/catalog`:

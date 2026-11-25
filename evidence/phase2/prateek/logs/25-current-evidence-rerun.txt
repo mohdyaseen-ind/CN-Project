@@ -1,0 +1,223 @@
+Prateek current evidence rerun — 2026-11-25 23:53:10 IST
+
+=== Primary DNS UDP answers / TTL ===
+app.team1.test.		30	IN	A	10.7.26.113
+exit=0
+api.team1.test.		30	IN	A	10.7.26.113
+exit=0
+
+=== Primary DNS TCP answers ===
+app.team1.test.		30	IN	A	10.7.26.113
+exit=0
+api.team1.test.		30	IN	A	10.7.26.113
+exit=0
+
+=== DNS service listeners ===
+exit=1
+
+=== Backend A process and status ===
+Backend A process: pid 64666
+HTTP/1.1 200 OK
+Server: BaseHTTP/0.6 Python/3.14.2
+Date: Wed, 25 Nov 2026 18:23:10 GMT
+X-Backend: A
+Cache-Control: no-store
+Content-Type: application/json
+Content-Length: 110
+
+{"backend": "A", "status": "ok", "host": "Prateeks-MacBook.local", "time": "2026-11-25T18:23:10.517982+00:00"}exit=0
+
+=== Backend A catalog cache headers/body ===
+HTTP/1.1 200 OK
+Server: BaseHTTP/0.6 Python/3.14.2
+Date: Wed, 25 Nov 2026 18:23:10 GMT
+X-Backend: A
+Cache-Control: max-age=60
+ETag: "218f45a7f65b69a5"
+Content-Type: application/json
+Content-Length: 57
+
+{"items": ["router", "switch", "firewall"], "version": 1}exit=0
+
+=== Backend A conditional ETag request ===
+ETag="218f45a7f65b69a5"
+HTTP/1.1 304 Not Modified
+Server: BaseHTTP/0.6 Python/3.14.2
+Date: Wed, 25 Nov 2026 18:23:10 GMT
+X-Backend: A
+Cache-Control: max-age=60
+ETag: "218f45a7f65b69a5"
+
+exit=0
+
+=== Backend B direct status ===
+curl: (52) Empty reply from server
+exit=52
+
+=== Standby nginx config and status ===
+nginx: the configuration file /Users/prateekshakya/Desktop/CN-Project/configs/edge/nginx-standby.conf syntax is ok
+nginx: configuration file /Users/prateekshakya/Desktop/CN-Project/configs/edge/nginx-standby.conf test is successful
+config-test exit=0
+Standby nginx master: pid 49104
+HTTP/2 200
+server: nginx/1.31.6
+date: Wed, 25 Nov 2026 18:23:10 GMT
+content-type: application/json
+content-length: 110
+x-backend: A
+cache-control: no-store
+x-edge: standby
+
+{"backend": "A", "status": "ok", "host": "Prateeks-MacBook.local", "time": "2026-11-25T18:23:10.817730+00:00"}status exit=0
+
+=== Standby six-request backend distribution ===
+request 1
+HTTP/2 200
+server: nginx/1.31.6
+date: Wed, 25 Nov 2026 18:23:10 GMT
+content-type: application/json
+content-length: 110
+x-backend: A
+cache-control: no-store
+x-edge: standby
+
+exit=0
+request 2
+HTTP/2 200
+server: nginx/1.31.6
+date: Wed, 25 Nov 2026 18:23:10 GMT
+content-type: application/json
+content-length: 110
+x-backend: A
+cache-control: no-store
+x-edge: standby
+
+exit=0
+request 3
+HTTP/2 200
+server: nginx/1.31.6
+date: Wed, 25 Nov 2026 18:23:10 GMT
+content-type: application/json
+content-length: 110
+x-backend: A
+cache-control: no-store
+x-edge: standby
+
+exit=0
+request 4
+HTTP/2 200
+server: nginx/1.31.6
+date: Wed, 25 Nov 2026 18:23:10 GMT
+content-type: application/json
+content-length: 110
+x-backend: A
+cache-control: no-store
+x-edge: standby
+
+exit=0
+request 5
+HTTP/2 200
+server: nginx/1.31.6
+date: Wed, 25 Nov 2026 18:23:10 GMT
+content-type: application/json
+content-length: 110
+x-backend: A
+cache-control: no-store
+x-edge: standby
+
+exit=0
+request 6
+HTTP/2 200
+server: nginx/1.31.6
+date: Wed, 25 Nov 2026 18:23:10 GMT
+content-type: application/json
+content-length: 110
+x-backend: A
+cache-control: no-store
+x-edge: standby
+
+exit=0
+
+=== Main-edge config test on this host (does not start service) ===
+nginx: the configuration file /Users/prateekshakya/Desktop/CN-Project/configs/edge/nginx.conf syntax is ok
+nginx: configuration file /Users/prateekshakya/Desktop/CN-Project/configs/edge/nginx.conf test is successful
+exit=0
+
+=== Main-edge HTTP redirect probe ===
+HTTP/1.1 301 Moved Permanently
+Server: nginx
+Date: Wed, 25 Nov 2026 18:23:10 GMT
+Content-Type: text/html
+Content-Length: 162
+Connection: keep-alive
+Location: https://app.team1.test:8443/
+
+<html>
+<head><title>301 Moved Permanently</title></head>
+<body>
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+exit=0
+
+=== Main-edge HTTPS trust probe (expected to expose current trust failure) ===
+curl: (60) SSL certificate problem: self signed certificate
+More details here: https://curl.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+exit=60
+
+=== Backup DNS UDP/TCP probe (no service changes) ===
+;; connection timed out; no servers could be reached
+UDP exit=9
+;; communications error to 10.7.18.197#53: connection reset
+TCP exit=0
+
+=== Host identity, DNS process/listeners, and peer reachability — 2026-11-25 23:54:06 IST ===
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	options=6460<TSO4,TSO6,CHANNEL_IO,PARTIAL_CSUM,ZEROINVERT_CSUM>
+	ether [redacted locally]
+	inet6 [redacted locally]
+	inet 10.7.28.39 netmask 0xffffe000 broadcast 10.7.31.255
+	nd6 options=201<PERFORMNUD,DAD>
+	media: autoselect
+	status: active
+
+--- default route ---
+    gateway: 10.7.0.1
+  interface: en0
+
+--- dnsmasq process ---
+38477 /opt/homebrew/opt/dnsmasq/sbin/dnsmasq --keep-in-foreground -C /opt/homebrew/etc/dnsmasq.conf -7 /opt/homebrew/etc/dnsmasq.d,*.conf
+69723 /bin/bash --norc --noprofile -c { printf '\n=== Host identity, DNS process/listeners, and peer reachability — %s ===\n' "$(date '+%Y-%m-%d %H:%M:%S %Z')"; ifconfig en0 | sed -n '1,12p'; printf '\n--- default route ---\n'; route -n get default | grep -E 'gateway:|interface:'; printf '\n--- dnsmasq process ---\n'; ps -ax -o pid=,command= | grep '[d]nsmasq'; printf '\n--- dnsmasq Homebrew service ---\n'; brew services list | grep -i dnsmasq; printf '\n--- TCP port 53 ---\n'; netstat -anv -p tcp | grep -E '[.:]53[[:space:]]'; printf '\n--- UDP port 53 ---\n'; netstat -anv -p udp | grep -E '[.:]53[[:space:]]'; printf '\n--- peer ping Sankalp ---\n'; ping -c 2 -W 1000 10.7.26.113; printf '\n--- peer ping Sarthak ---\n'; ping -c 2 -W 1000 10.7.18.197; } 2>&1 | tee -a evidence/phase2/prateek/logs/25-current-evidence-rerun.txt
+69724 /bin/bash --norc --noprofile -c { printf '\n=== Host identity, DNS process/listeners, and peer reachability — %s ===\n' "$(date '+%Y-%m-%d %H:%M:%S %Z')"; ifconfig en0 | sed -n '1,12p'; printf '\n--- default route ---\n'; route -n get default | grep -E 'gateway:|interface:'; printf '\n--- dnsmasq process ---\n'; ps -ax -o pid=,command= | grep '[d]nsmasq'; printf '\n--- dnsmasq Homebrew service ---\n'; brew services list | grep -i dnsmasq; printf '\n--- TCP port 53 ---\n'; netstat -anv -p tcp | grep -E '[.:]53[[:space:]]'; printf '\n--- UDP port 53 ---\n'; netstat -anv -p udp | grep -E '[.:]53[[:space:]]'; printf '\n--- peer ping Sankalp ---\n'; ping -c 2 -W 1000 10.7.26.113; printf '\n--- peer ping Sarthak ---\n'; ping -c 2 -W 1000 10.7.18.197; } 2>&1 | tee -a evidence/phase2/prateek/logs/25-current-evidence-rerun.txt
+
+--- dnsmasq Homebrew service ---
+dnsmasq none            root
+
+--- TCP port 53 ---
+tcp4       0      0  127.0.0.1.53           *.*                    LISTEN                 0            0  131072  131072          dnsmasq:38477  00180 00000006 00000000001dd6e5 00000000 00000800      1      0 000000
+tcp4       0      0  10.7.28.39.53          *.*                    LISTEN                 0            0  131072  131072          dnsmasq:38477  00180 00000006 00000000001dd6e3 00000000 00000800      1      0 000000
+
+--- UDP port 53 ---
+udp4       0      0  127.0.0.1.53           *.*                                         456          236  786896    9216          dnsmasq:38477  00180 00000004 00000000001dd6e4 00000000 04000800      1      0 000002
+udp4       0      0  10.7.28.39.53          *.*                                        4466         2281  786896    9216          dnsmasq:38477  00180 00000004 00000000001dd6e2 20000000 04000800      1      0 000002
+
+--- peer ping Sankalp ---
+PING 10.7.26.113 (10.7.26.113): 56 data bytes
+64 bytes from 10.7.26.113: icmp_seq=0 ttl=64 time=6.076 ms
+64 bytes from 10.7.26.113: icmp_seq=1 ttl=64 time=6.519 ms
+
+--- 10.7.26.113 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 6.076/6.297/6.519/0.222 ms
+
+--- peer ping Sarthak ---
+PING 10.7.18.197 (10.7.18.197): 56 data bytes
+Request timeout for icmp_seq 0
+
+--- 10.7.18.197 ping statistics ---
+2 packets transmitted, 0 packets received, 100.0% packet loss

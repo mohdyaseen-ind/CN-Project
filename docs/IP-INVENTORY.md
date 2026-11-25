@@ -1,14 +1,14 @@
 # IP Inventory
 
-The three addresses below are the assignments provided for the project. Only
-Prateek's current host was queried directly in this session; remote assignments
-remain unverified until each teammate confirms them.
+Addresses and interface details below distinguish direct observations from
+teammate-reported values. Sarthak's reported subnet mask conflicts with the
+expected project subnet and needs confirmation.
 
 | Member | Role | Assigned IPv4 | Interface | Verification/source |
 |---|---|---:|---|---|
-| Prateek | Primary DNS, Backend A, standby nginx | `10.7.28.39` | `en0` | Verified locally on 2026-11-25 |
-| Sankalp | Main nginx, HTTPS/load balancing | `10.7.26.113` | `en0` expected | Team assignment; not verified on host |
-| Sarthak | Backup DNS, Backend B, test client/Wireshark | `10.7.18.197` | `en0` expected | Team assignment; not verified on host |
+| Prateek | Primary DNS, Backend A, standby nginx | `10.7.28.39/20` | `en0` | Directly verified; gateway `10.7.0.1` |
+| Sankalp | Main nginx, HTTPS/load balancing | `10.7.26.113` (assigned) | `en0` expected | Host ping and TCP 8080/8443 succeed; address/mask/gateway not verified on host; HTTPS certificate currently untrusted by Prateek |
+| Sarthak | Backup DNS, Backend B, test client/Wireshark | `10.7.18.197/19` (reported) | `en0` (reported) | Reported by Sarthak; ping and Backend B HTTP verified remotely; DNS remote query fails |
 
 ## Prateek's observed network
 
@@ -18,6 +18,8 @@ remain unverified until each teammate confirms them.
 - Default gateway: `10.7.0.1`
 - Expected shared subnet: `10.7.16.0/20`
 
-The other members' gateway, netmask, and hardware addresses have not been
-collected. Confirm those values on their devices rather than copying Prateek's
-observations.
+Sarthak's report lists gateway `10.7.0.1` and netmask `/19`
+(`255.255.224.0`), rather than expected `/20` (`255.255.240.0`). The `/19`
+contains the assigned hosts but is broader than the documented subnet; have
+the team confirm whether this is intended. Sankalp's mask, gateway, and all
+peer MAC addresses have not been collected.
