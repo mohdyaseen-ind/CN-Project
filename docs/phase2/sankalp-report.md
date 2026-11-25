@@ -39,9 +39,13 @@ The local/LAN resolver tests have not yet run because binding privileged port
 53 requires an authenticated sudo session. Primary DNS at Prateek remains
 running. The macOS Application Firewall is enabled and allows the dnsmasq
 binary, but active PF policy and end-to-end remote UDP/TCP access still must be
-demonstrated after startup. Run `sudo ./scripts/backup-dns.sh start` in
-Terminal, then use the remote verification commands for Prateek and Sarthak in
-`docs/phase2/sarthak-client-setup.md`.
+demonstrated after startup. A later running process was observed with the
+relative argument `--conf-file=configs/dns/dnsmasq-backup.conf`; its UDP/TCP
+queries returned NXDOMAIN for both project names. The expected host records
+are present. The backup template now uses absolute hosts/log/PID paths, and the
+launch script now passes the absolute config path. The current process must be
+restarted from the project script for those deterministic paths to take effect.
+See `evidence/phase2/sankalp/logs/20-backup-dns-nxdomain-diagnosis.txt`.
 
 ## Main edge and baseline integration
 
@@ -170,7 +174,7 @@ to the firewall.
 | Host address and interface | PASS with discrepancy | `00-audit-and-connectivity.txt`; `07-additional-verification.txt` | Reconcile `/19` vs expected `/20` with team/network administrator. |
 | Primary DNS UDP/TCP | PASS from this host | `07-additional-verification.txt` | Verify from a second client. |
 | Backup DNS installation/config | PASS | `17-backup-dns-config-test.txt` | Run the authorized start command from an authenticated Terminal session. |
-| Backup DNS local/LAN answers | PENDING | Not run; port 53 had no listener | Start, then test loopback and `10.7.26.113` via UDP/TCP. |
+| Backup DNS local/LAN answers | FAIL before fix | `20-backup-dns-nxdomain-diagnosis.txt`: NXDOMAIN over UDP/TCP | Restart only project backup dnsmasq using the grouped command and retest. |
 | Backup DNS remote answers | PENDING | Remote test not run yet | Prateek and Sarthak must run documented verification commands. |
 | Backend A and B | PASS from this edge | `06-baseline-integration.txt` | Preserve during coordinated failure tests. |
 | Main nginx config and service | PASS | `06-baseline-integration.txt` | Capture actual screenshot after checks are displayed. |
