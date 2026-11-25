@@ -1,11 +1,7 @@
 .DS_Store
 
-__pycache__/
-*.py[cod]
-var/
-
 *.key
 *.csr
 *.srl
 
-/edge/
+edge/

@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Tiny REST backend. Stdlib only — no pip install needed.
-Run from the repository root:
-      python3 backend/server.py A 3001   (Prateek / Backend A)
-      python3 backend/server.py B 3002   (Sarthak / Backend B)
+Run:  python3 server.py A 3001   (Mac 3)
+      python3 server.py B 3002   (Mac 4)
 """
 import hashlib, json, socket, sys
 from datetime import datetime, timezone

@@ -1,23 +1,10 @@
 # IP Inventory
 
-The three addresses below are the assignments provided for the project. Only
-Prateek's current host was queried directly in this session; remote assignments
-remain unverified until each teammate confirms them.
+| Mac | Member | Role | IPv4 | Netmask/Prefix | Gateway | Interface | MAC Address |
+|---|---|---|---|---|---|---|---|
+| Mac 1 | Sankalp | DNS | TODO | TODO | TODO | en0 | TODO |
+| Mac 2 | Prateek | nginx/Edge | TODO | TODO | TODO | en0 | TODO |
+| Mac 3 | Yaseen | Backend A :3001 | TODO | TODO | TODO | en0 | TODO |
+| Mac 4 | Mathapati/Sarthak | Backend B :3002 | TODO | TODO | TODO | en0 | TODO |
 
-| Member | Role | Assigned IPv4 | Interface | Verification/source |
-|---|---|---:|---|---|
-| Prateek | Primary DNS, Backend A, standby nginx | `10.7.28.39` | `en0` | Verified locally on 2026-11-25 |
-| Sankalp | Main nginx, HTTPS/load balancing | `10.7.26.113` | `en0` expected | Team assignment; not verified on host |
-| Sarthak | Backup DNS, Backend B, test client/Wireshark | `10.7.18.197` | `en0` expected | Team assignment; not verified on host |
-
-## Prateek's observed network
-
-- Interface: `en0` (active)
-- IPv4/netmask: `10.7.28.39/20` (`255.255.240.0`)
-- Broadcast: `10.7.31.255`
-- Default gateway: `10.7.0.1`
-- Expected shared subnet: `10.7.16.0/20`
-
-The other members' gateway, netmask, and hardware addresses have not been
-collected. Confirm those values on their devices rather than copying Prateek's
-observations.
+Do not leave the TODO values in the final submission.
