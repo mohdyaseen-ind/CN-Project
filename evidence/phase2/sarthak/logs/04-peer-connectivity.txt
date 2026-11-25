@@ -1,0 +1,75 @@
+=== Timestamp: 2026-11-25T18:02:46Z ===
+--- Ping Prateek 10.7.28.39 ---
+PING 10.7.28.39 (10.7.28.39): 56 data bytes
+64 bytes from 10.7.28.39: icmp_seq=0 ttl=64 time=5.511 ms
+64 bytes from 10.7.28.39: icmp_seq=1 ttl=64 time=8.590 ms
+
+--- 10.7.28.39 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 5.511/7.050/8.590/1.540 ms
+--- Ping Sankalp 10.7.26.113 ---
+PING 10.7.26.113 (10.7.26.113): 56 data bytes
+64 bytes from 10.7.26.113: icmp_seq=0 ttl=64 time=15.933 ms
+64 bytes from 10.7.26.113: icmp_seq=1 ttl=64 time=7.874 ms
+
+--- 10.7.26.113 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 7.874/11.903/15.933/4.030 ms
+--- Prateek DNS (10.7.28.39:53) ---
+
+; <<>> DiG 9.10.6 <<>> @10.7.28.39 app.team1.test A
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13496
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;app.team1.test.			IN	A
+
+;; ANSWER SECTION:
+app.team1.test.		30	IN	A	10.7.26.113
+
+;; Query time: 32 msec
+;; SERVER: 10.7.28.39#53(10.7.28.39)
+;; WHEN: Wed Nov 25 23:32:48 IST 2026
+;; MSG SIZE  rcvd: 59
+
+
+; <<>> DiG 9.10.6 <<>> +tcp @10.7.28.39 api.team1.test A
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 62907
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;api.team1.test.			IN	A
+
+;; ANSWER SECTION:
+api.team1.test.		30	IN	A	10.7.26.113
+
+;; Query time: 15 msec
+;; SERVER: 10.7.28.39#53(10.7.28.39)
+;; WHEN: Wed Nov 25 23:32:48 IST 2026
+;; MSG SIZE  rcvd: 59
+
+--- Prateek Backend A (10.7.28.39:3001) ---
+HTTP/1.1 200 OK
+Server: BaseHTTP/0.6 Python/3.14.2
+Date: Wed, 25 Nov 2026 18:02:48 GMT
+X-Backend: A
+Cache-Control: no-store
+Content-Type: application/json
+Content-Length: 110
+
+{"backend": "A", "status": "ok", "host": "Prateeks-MacBook.local", "time": "2026-11-25T18:02:48.367874+00:00"}
+--- Prateek Standby (10.7.28.39:8443) ---
+Connection to 10.7.28.39 port 8443 [tcp/pcsync-https] succeeded!
+--- Sankalp Main Edge (10.7.26.113:8080/8443) ---
+nc: connectx to 10.7.26.113 port 8080 (tcp) failed: Connection refused
+nc: connectx to 10.7.26.113 port 8443 (tcp) failed: Connection refused

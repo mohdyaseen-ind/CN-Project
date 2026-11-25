@@ -8,7 +8,7 @@ remain unverified until each teammate confirms them.
 |---|---|---:|---|---|
 | Prateek | Primary DNS, Backend A, standby nginx | `10.7.28.39` | `en0` | Verified locally on 2026-11-25 |
 | Sankalp | Main nginx, HTTPS/load balancing | `10.7.26.113` | `en0` expected | Team assignment; not verified on host |
-| Sarthak | Backup DNS, Backend B, test client/Wireshark | `10.7.18.197` | `en0` expected | Team assignment; not verified on host |
+| Sarthak | Backup DNS, Backend B, test client/Wireshark | `10.7.18.197` | `en0` | Verified locally on 2026-11-25 |
 
 ## Prateek's observed network
 

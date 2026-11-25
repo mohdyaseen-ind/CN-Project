@@ -38,8 +38,8 @@ screencapture -i evidence/phase2/sarthak/22-troubleshooting.png
 | `02-dnsmasq-permission.png` | Firewall Options showing `dnsmasq` blocked & profile lock | Captured |
 | `03-backup-dns-service.png` | `dnsmasq` process, TCP/UDP port 53 listeners, config | Log available (`01-firewall-diagnosis.txt`); screenshot pending |
 | `04-backup-dns-local-test.png` | Localhost UDP/TCP `dig @127.0.0.1` + forwarding | Log available (`03-backup-dns-local.txt`); screenshot pending |
-| `05-backup-dns-remote-test.png` | Remote DNS queries to `10.7.18.197:53` from peers | **Blocked** by managed firewall profile (`State = 2`) |
-| `06-backend-b-status.png` | Backend B `/`, `/api/status`, `/api/catalog` 200 & 304 | Local log available (`02-backend-b-verification.txt`); LAN blocked by firewall |
+| `05-backup-dns-remote-test.png` | Remote DNS queries to `10.7.18.197:53` from peers | **Blocked** by `dnsmasq` per-app `Block incoming connections` rule |
+| `06-backend-b-status.png` | Backend B `/`, `/api/status`, `/api/catalog` 200 & 304 | **PASS** on `127.0.0.1` & `10.7.18.197:3002` (`02-backend-b-verification.txt`); screenshot pending |
 | `07-client-dns-settings.png` | `en0` configured with `10.7.28.39` & `10.7.18.197` | Pending remote backup DNS verification |
 | `08-client-https-success.png` | `https://app.team1.test:8443` without `-k` | Pending Sankalp main edge & public cert |
 | `09-wireshark-dns-query.png` | Wireshark DNS query packet | Pending Checkpoint 3 |

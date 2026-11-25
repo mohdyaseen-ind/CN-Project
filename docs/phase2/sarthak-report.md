@@ -16,26 +16,27 @@ pending.
 
 ## 2. Checkpoint 1 — Firewall Diagnosis & Backend B
 
-### Managed Firewall Blocker (Exact Diagnosis)
+### Firewall Status & Remaining `dnsmasq` Blocker
 
-- **Firewall State:** `/usr/libexec/ApplicationFirewall/socketfilterfw` reports `State = 2` (*"Firewall is blocking all non-essential incoming connections"*) and `Firewall stealth mode is on`.
+- **Firewall State (Updated):** `/usr/libexec/ApplicationFirewall/socketfilterfw` now reports `State = 1` (*"Firewall is enabled"*), `Firewall has block all state set to disabled`, and `Firewall stealth mode is off`.
 - **Application Rules:**
-  - `/opt/homebrew/Cellar/dnsmasq/2.93/sbin/dnsmasq` → `Block incoming connections`
-  - `/Library/Frameworks/Python.framework/Versions/3.14/Resources/Python.app` → `Allow incoming connections` (overridden by `State = 2` on non-loopback `en0`).
-- **Management Profile Lock:** `profiles list -v` shows user profile `com.apple.ManagedSettings.macOS.7BE22211-B222-4C33-9D44-110000000055` (`com.apple.familycontrols.contentfilter`).
-- **GUI Confirmation (see `01-firewall-status.png`, `02-dnsmasq-permission.png`):** System Settings → Network → Firewall → Options displays *"This setting has been configured by a profile."* Both **"Block all incoming connections"** (ON) and **`dnsmasq`** (Block) are locked/greyed out and cannot be modified by the user or CLI.
-- **Impact:** `dnsmasq` works on `127.0.0.1:53` (UDP/TCP, TTL `30`, forwarding `example.com`) and Backend B works on `127.0.0.1:3002`, but incoming LAN connections to `10.7.18.197:53` time out and incoming LAN connections to `10.7.18.197:3002` fail with `Empty reply from server` / `OSError: [Errno 57] Socket is not connected`.
+  - `/Library/Frameworks/Python.framework/Versions/3.14/Resources/Python.app` → `Allow incoming connections` (now effective — **Backend B on `10.7.18.197:3002` is reachable over the LAN**).
+  - `/opt/homebrew/Cellar/dnsmasq/2.93/sbin/dnsmasq` → **`Block incoming connections`** (still blocked).
+- **Impact:**
+  - **Backend B (`10.7.18.197:3002`):** Verified working on both `127.0.0.1:3002` and LAN `10.7.18.197:3002` (`HTTP/1.1 200 OK`, `X-Backend: B`, `Cache-Control: max-age=60`, `ETag: "218f45a7f65b69a5"`, conditional `304 Not Modified`), with an active `ESTABLISHED` connection observed from Prateek (`10.7.28.39`).
+  - **Backup DNS (`10.7.18.197:53`):** Works on `127.0.0.1:53` (UDP/TCP, TTL `30`, forwarding `example.com`), but queries to `10.7.18.197:53` still time out (UDP) / EOF (TCP) until `dnsmasq` is changed to `Allow incoming connections` in System Settings → Network → Firewall → Options.
+- **Wireshark Capture Permissions:** `/Applications/Wireshark.app` is installed, but `/dev/bpf0` is `root:wheel crw-------` (`Permission denied` for `dumpcap -i en0`). Installing Wireshark's `ChmodBPF` helper is required before packet capture.
 
-### Backend B Verification (`127.0.0.1:3002`)
+### Backend B Verification (`127.0.0.1:3002` & `10.7.18.197:3002`)
 
 | Check | Result |
 |---|---|
 | Listener (`0.0.0.0:3002`) | Running via `scripts/backend-b-start.sh` |
 | `GET /` | `HTTP/1.1 200 OK`, `X-Backend: B` |
-| `GET /api/status` | `HTTP/1.1 200 OK`, `X-Backend: B`, `{"backend": "B", "status": "ok", ...}` |
+| `GET /api/status` (`127.0.0.1` & `10.7.18.197`) | `HTTP/1.1 200 OK`, `X-Backend: B`, `{"backend": "B", "status": "ok", ...}` |
 | `GET /api/catalog` | `HTTP/1.1 200 OK`, `Cache-Control: max-age=60`, `ETag: "218f45a7f65b69a5"` |
 | `GET /api/catalog` (`If-None-Match`) | `HTTP/1.1 304 Not Modified` |
-| LAN `10.7.18.197:3002` | **Blocked** by managed firewall `State = 2` |
+| LAN `10.7.18.197:3002` | **PASS** (verified locally & observed `ESTABLISHED` from `10.7.28.39`) |
 
 ## 3. Checkpoints 2–4 — Pending Dependencies
 
