@@ -1,0 +1,77 @@
+Primary DNS query verification
+2026-11-25 20:49:43 IST
+
+UDP app record and TTL
+
+; <<>> DiG 9.10.6 <<>> +time=2 +tries=1 @10.7.28.39 app.team1.test A +noall +answer +comments
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 49683
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; ANSWER SECTION:
+app.team1.test.		30	IN	A	10.7.26.113
+
+
+UDP api record and TTL
+
+; <<>> DiG 9.10.6 <<>> +time=2 +tries=1 @10.7.28.39 api.team1.test A +noall +answer +comments
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 3259
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; ANSWER SECTION:
+api.team1.test.		30	IN	A	10.7.26.113
+
+
+TCP api record and TTL
+
+; <<>> DiG 9.10.6 <<>> +tcp +time=2 +tries=1 @10.7.28.39 api.team1.test A +noall +answer +comments
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 7582
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; ANSWER SECTION:
+api.team1.test.		30	IN	A	10.7.26.113
+
+
+Forwarded external name
+
+; <<>> DiG 9.10.6 <<>> +time=3 +tries=1 @10.7.28.39 example.com A +noall +answer +comments
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 47385
+;; flags: qr rd ra; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; ANSWER SECTION:
+example.com.		184	IN	A	104.20.23.154
+example.com.		184	IN	A	172.66.147.243
+
+Primary DNS loopback verification
+2026-11-25 20:50:27 IST
+
+; <<>> DiG 9.10.6 <<>> +time=2 +tries=1 @127.0.0.1 app.team1.test A +noall +answer +comments
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 46846
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; ANSWER SECTION:
+app.team1.test.		30	IN	A	10.7.26.113
