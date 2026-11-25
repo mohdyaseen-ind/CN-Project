@@ -44,7 +44,7 @@ screencapture -i evidence/phase2/prateek/16-rollback-verification.png
 | `11-direct-access-blocked.png` | Unauthorized direct Backend A connection blocked | Not run; firewall activation and client required |
 | `12-backend-a-stopped.png` | Backend A outage | Not run; Sankalp coordination required |
 | `13-backend-a-restored.png` | Backend A restored | Backend A is left running; failure cycle not begun |
-| `14-standby-nginx.png` | Standby config test and local HTTPS response | Local test log available; screenshot pending |
+| `14-standby-nginx.png` | Standby config test and local HTTPS response | Captured; screenshot shows successful config test and HTTP 200 with `X-Backend: A` and `X-Edge: standby` |
 | `15-edge-migration.png` | Coordinated DNS cutover to standby and `X-Edge` | Not run; team validation/approval required |
 | `16-rollback-verification.png` | DNS/firewall rollback and service verification | Not run; no migration/firewall change made |
 
