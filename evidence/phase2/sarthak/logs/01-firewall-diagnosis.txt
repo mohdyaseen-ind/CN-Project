@@ -1,0 +1,90 @@
+=== Timestamp: 2026-11-25T16:46:59Z ===
+--- socketfilterfw ---
+Firewall is blocking all non-essential incoming connections. (State = 2)
+Firewall is blocking all non-essential incoming connections.
+Firewall stealth mode is on
+Total number of apps = 20 
+1 : /opt/homebrew/Cellar/dnsmasq/2.93/sbin/dnsmasq 
+             (Block incoming connections)
+2 : /Users/sarthakmathapati/Library/Arduino15/packages/builtin/tools/mdns-discovery/1.1.0/mdns-discovery 
+             (Block incoming connections)
+3 : /usr/libexec/ContinuityCaptureAgent 
+             (Allow incoming connections)
+4 : /usr/libexec/clocksyncd 
+             (Allow incoming connections)
+5 : /opt/homebrew/Cellar/node/25.9.0_2/bin/node 
+             (Allow incoming connections)
+6 : /Library/Frameworks/Python.framework/Versions/3.14/Resources/Python.app 
+             (Allow incoming connections)
+7 : /System/Library/PrivateFrameworks/IDS.framework/identityservicesd.app/Contents/MacOS/identityservicesd 
+             (Allow incoming connections)
+8 : /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/151.0.7922.76/Helpers/Codex (Service).app 
+             (Allow incoming connections)
+9 : /Applications/WhatsApp.app 
+             (Allow incoming connections)
+10 : /Applications/Brave Browser.app/Contents/MacOS/Brave Browser 
+             (Allow incoming connections)
+11 : /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app 
+             (Allow incoming connections)
+12 : /Applications/Elmedia Video Player.app/Contents/MacOS/Elmedia Video Player 
+             (Allow incoming connections)
+13 : /usr/local/bin/node 
+             (Allow incoming connections)
+14 : /Applications/Google Chrome.app 
+             (Allow incoming connections)
+15 : /usr/libexec/sharingd 
+             (Allow incoming connections)
+16 : /Applications/Brave Browser.app/Contents/Frameworks/Brave Browser Framework.framework/Versions/145.1.87.191/Helpers/Brave Browser Helper.app 
+             (Allow incoming connections)
+17 : /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter 
+             (Allow incoming connections)
+18 : /System/Library/PrivateFrameworks/ReplicatorCore.framework/Support/replicatord 
+             (Allow incoming connections)
+19 : /usr/libexec/rapportd 
+             (Allow incoming connections)
+20 : AzureFrontDoor.MicrosoftSecurity 
+             (Allow incoming connections)
+--- profiles ---
+profiles: verbose mode ON
+profiles: using user name = sarthakmathapati
+sarthakmathapati[1] attribute: name: ManagedSettings User Settings
+sarthakmathapati[1] attribute: configurationDescription: (null)
+sarthakmathapati[1] attribute: installationDate: 2026-11-25 16:45:31 +0000
+sarthakmathapati[1] attribute: organization: (null)
+sarthakmathapati[1] attribute: profileIdentifier: com.apple.ManagedSettings.macOS.7BE22211-B222-4C33-9D44-110000000055
+sarthakmathapati[1] attribute: profileUUID: 7BE22211-B222-4C33-9D44-110000000055
+sarthakmathapati[1] attribute: profileType: Configuration
+sarthakmathapati[1] attribute: removalDisallowed: FALSE
+sarthakmathapati[1] attribute: version: 1
+sarthakmathapati[1] attribute: containsComputerItems: FALSE
+sarthakmathapati[1] attribute: installedByMDM: FALSE
+sarthakmathapati[1] attribute: internaldata: TRUE
+sarthakmathapati[1] payload count = 1
+sarthakmathapati[1]            payload[1] name			= (null)
+sarthakmathapati[1]            payload[1] description		= (null)
+sarthakmathapati[1]            payload[1] type			= com.apple.familycontrols.contentfilter
+sarthakmathapati[1]            payload[1] organization		= (null)
+sarthakmathapati[1]            payload[1] identifier		= com.apple.ManagedSettings.macOS.7BE22222-B233-4C44-9D55-000000000070
+sarthakmathapati[1]            payload[1] uuid			= 7BE22222-B233-4C44-9D55-000000000070
+There are 1 user configuration profiles installed for 'sarthakmathapati'
+--- dnsmasq process ---
+nobody           83486   0.0  0.0 488786352   1024   ??  Ss    3:53PM   0:00.14 /opt/homebrew/opt/dnsmasq/sbin/dnsmasq --keep-in-foreground -C /opt/homebrew/etc/dnsmasq.conf -7 /opt/homebrew/etc/dnsmasq.d,*.conf
+--- port 53 sockets ---
+tcp4       0      0  127.0.0.1.53           *.*                    LISTEN     
+tcp4       0      0  10.7.18.197.53         *.*                    LISTEN     
+udp4       0      0  127.0.0.1.53           *.*                               
+udp4       0      0  10.7.18.197.53         *.*                               
+--- dnsmasq.log (tail 20) ---
+Nov 25 15:53:16 dnsmasq[83486]: started, version 2.93 cachesize 150
+Nov 25 15:53:16 dnsmasq[83486]: compile time options: IPv6 GNU-getopt no-DBus no-UBus no-i18n no-IDN DHCP DHCPv6 no-Lua TFTP no-conntrack no-ipset no-nftset auth no-DNSSEC loop-detect no-inotify dumpfile
+Nov 25 15:53:16 dnsmasq[83486]: using nameserver 8.8.8.8#53
+Nov 25 15:53:16 dnsmasq[83486]: using nameserver 1.1.1.1#53
+Nov 25 15:53:16 dnsmasq[83486]: using only locally-known addresses for team1.test
+Nov 25 15:53:16 dnsmasq[83486]: read /etc/hosts - 3 names
+Nov 25 15:53:16 dnsmasq[83486]: read /opt/homebrew/etc/team.hosts - 2 names
+Nov 25 15:54:15 dnsmasq[83486]: query[A] app.team1.test from 127.0.0.1
+Nov 25 15:54:15 dnsmasq[83486]: /opt/homebrew/etc/team.hosts app.team1.test is 10.7.26.113
+Nov 25 15:54:15 dnsmasq[83486]: query[A] api.team1.test from 127.0.0.1
+Nov 25 15:54:15 dnsmasq[83486]: /opt/homebrew/etc/team.hosts api.team1.test is 10.7.26.113
+Nov 25 22:15:35 dnsmasq[83486]: query[A] app.team1.test from 127.0.0.1
+Nov 25 22:15:35 dnsmasq[83486]: /opt/homebrew/etc/team.hosts app.team1.test is 10.7.26.113

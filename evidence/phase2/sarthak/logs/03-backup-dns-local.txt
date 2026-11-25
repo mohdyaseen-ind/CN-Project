@@ -1,0 +1,56 @@
+=== Timestamp: 2026-11-25T16:46:59Z ===
+--- UDP localhost app.team1.test ---
+
+; <<>> DiG 9.10.6 <<>> @127.0.0.1 app.team1.test A
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 43586
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;app.team1.test.			IN	A
+
+;; ANSWER SECTION:
+app.team1.test.		30	IN	A	10.7.26.113
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Wed Nov 25 22:16:59 IST 2026
+;; MSG SIZE  rcvd: 59
+
+--- TCP localhost api.team1.test ---
+
+; <<>> DiG 9.10.6 <<>> +tcp @127.0.0.1 api.team1.test A
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 49949
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;api.team1.test.			IN	A
+
+;; ANSWER SECTION:
+api.team1.test.		30	IN	A	10.7.26.113
+
+;; Query time: 6 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Wed Nov 25 22:16:59 IST 2026
+;; MSG SIZE  rcvd: 59
+
+--- Forwarding localhost example.com ---
+104.20.23.154
+172.66.147.243
+--- UDP LAN IP 10.7.18.197 (expected timeout due to firewall) ---
+
+; <<>> DiG 9.10.6 <<>> +time=2 +tries=1 @10.7.18.197 app.team1.test A
+; (1 server found)
+;; global options: +cmd
+;; connection timed out; no servers could be reached
+--- TCP LAN IP 10.7.18.197 (expected timeout due to firewall) ---
+;; communications error to 10.7.18.197#53: end of file
