@@ -40,6 +40,7 @@ shows a query to public `8.8.8.8` that returned NXDOMAIN for the project name.
 | 30 | `30-backup-dns-local-lan-resolution.png` | PENDING | Requires admin-authorized project dnsmasq start; verify both loopback and `10.7.26.113`. |
 | 31 | `31-backup-dns-remote-prateek.png` | PENDING | Prateek must run remote UDP/TCP verification commands in `docs/phase2/sarthak-client-setup.md`. |
 | 32 | `32-backup-dns-remote-sarthak.png` | PENDING | Sarthak must run remote UDP/TCP verification commands in `docs/phase2/sarthak-client-setup.md`. |
+| 33 | `33-backup-dns-nxdomain-fixed.png` | PENDING | Capture only after the targeted restart and all UDP/TCP answers return `10.7.26.113`, TTL 30. Diagnosis is recorded in `logs/20-backup-dns-nxdomain-diagnosis.txt`. |
 
 ## Screenshot capture commands
 
@@ -80,6 +81,7 @@ screencapture -i evidence/phase2/sankalp/29-backup-dns-port-firewall-audit.png
 screencapture -i evidence/phase2/sankalp/30-backup-dns-local-lan-resolution.png
 screencapture -i evidence/phase2/sankalp/31-backup-dns-remote-prateek.png
 screencapture -i evidence/phase2/sankalp/32-backup-dns-remote-sarthak.png
+screencapture -i evidence/phase2/sankalp/33-backup-dns-nxdomain-fixed.png
 ```
 
 Keep public certificates separate from private keys. Do not copy any `.key`
