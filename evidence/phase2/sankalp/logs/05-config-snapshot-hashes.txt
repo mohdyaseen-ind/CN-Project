@@ -1,0 +1,10 @@
+Configuration snapshot hashes; timestamp: 2026-11-25T22:19:47+05:30
+fac19ec21e1bd12e085d252c30b1ae8f49c4c69dc989e70f18d514e8b49323f2  configs/edge/nginx.conf
+25dfeb6de764c0bbb4146233c5a485a642e60eb9ecf89d787b39fa9477cfb769  configs/edge/nginx-standby.conf
+9a42b15a4fcb71871f35153636c27af72fce2a8c5bcc345e3f2633277db56de5  configs/dns/dnsmasq.conf
+feb5d89d9ead4782fe4a053e8c5ed5cde192c52e13b0778d46ce910249fefa91  configs/dns/dnsmasq-backup.conf
+44be3d83879864dd3b41c17dc78cf6615baa871f6580e81d8fdefa94befc6a9f  configs/dns/team.hosts
+f6d57d1ca6eea01b03d4ccb04710574ca6e78a88094931e7905159c11682b149  configs/tls/gen-cert.sh
+24fbe52fb88ecab29708bc9c76072446b55ac4b5eaf16871a3788ea0bd11e4ce  scripts/edge-nginx.sh
+4b33730e9ef03f4324078418fb590407b4f985b77bea55320e19342f156fe5ee  scripts/diagnose-edge.sh
+9b989b499cd413ddf4c51d7d8db4117b074f5cb140603e7c86d9019ac1bededb  edge/certs/app.crt

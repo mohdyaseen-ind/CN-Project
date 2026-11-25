@@ -1,0 +1,53 @@
+Timestamp: 2026-11-25T22:16:39+05:30
+
+$ ifconfig en0
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	options=6460<TSO4,TSO6,CHANNEL_IO,PARTIAL_CSUM,ZEROINVERT_CSUM>
+	ether a6:99:c5:fb:d5:ce
+	inet6 fe80::432:b530:ee65:4102%en0 prefixlen 64 secured scopeid 0xb 
+	inet 10.7.26.113 netmask 0xffffe000 broadcast 10.7.31.255
+	nd6 options=201<PERFORMNUD,DAD>
+	media: autoselect
+	status: active
+
+$ route -n get default
+route: socket: Operation not permitted
+
+$ scutil --dns (first 60 lines)
+No DNS configuration available
+
+$ ping -c 2 -W 1500 10.7.28.39
+ping: sendto: Operation not permitted
+ping: sendto: Operation not permitted
+PING 10.7.28.39 (10.7.28.39): 56 data bytes
+Request timeout for icmp_seq 0
+
+--- 10.7.28.39 ping statistics ---
+2 packets transmitted, 0 packets received, 100.0% packet loss
+
+$ ping -c 2 -W 1500 10.7.18.197
+ping: sendto: Operation not permitted
+ping: sendto: Operation not permitted
+PING 10.7.18.197 (10.7.18.197): 56 data bytes
+Request timeout for icmp_seq 0
+
+--- 10.7.18.197 ping statistics ---
+2 packets transmitted, 0 packets received, 100.0% packet loss
+
+$ nc -vz -G 2 10.7.28.39 53
+nc: connectx to 10.7.28.39 port 53 (tcp) failed: Operation not permitted
+
+$ nc -vz -G 2 10.7.28.39 3001
+nc: connectx to 10.7.28.39 port 3001 (tcp) failed: Operation not permitted
+
+$ nc -vz -G 2 10.7.18.197 53
+nc: connectx to 10.7.18.197 port 53 (tcp) failed: Operation not permitted
+
+$ nc -vz -G 2 10.7.18.197 3002
+nc: connectx to 10.7.18.197 port 3002 (tcp) failed: Operation not permitted
+
+$ openssl verify -verify_hostname app.team1.test -CAfile edge/certs/app.crt edge/certs/app.crt
+edge/certs/app.crt: OK
+
+$ openssl verify -verify_hostname api.team1.test -CAfile edge/certs/app.crt edge/certs/app.crt
+edge/certs/app.crt: OK

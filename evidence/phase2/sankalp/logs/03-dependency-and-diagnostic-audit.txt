@@ -1,0 +1,64 @@
+Timestamp: 2026-11-25T22:17:35+05:30
+
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		27.2.1
+BuildVersion:		26B131
+
+$ command -v brew nginx openssl python3 curl wireshark tshark
+/opt/homebrew/bin/brew
+/opt/homebrew/bin/openssl
+/opt/homebrew/bin/python3
+/usr/bin/curl
+/opt/homebrew/bin/tshark
+
+$ brew list --versions nginx openssl python wireshark
+openssl@4 4.0.3
+wireshark 4.6.7
+
+$ ./scripts/diagnose-edge.sh
+Edge diagnostic at 2026-11-25T22:17:36+05:30
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.28.39 app.team1.test A
+/AppleInternal/Library/BuildRoots/4~CZ8sugADelFZQJFGAfJN_VlgPqH9arA_2iiTnYI/Library/Caches/com.apple.xbs/TemporaryDirectory.g7Vc5o/Sources/bind9/bind9/lib/isc/unix/socket.c:5580: bind: Operation not permitted
+dig: isc_socket_bind: unexpected error
+[exit 10]
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.28.39 api.team1.test A
+/AppleInternal/Library/BuildRoots/4~CZ8sugADelFZQJFGAfJN_VlgPqH9arA_2iiTnYI/Library/Caches/com.apple.xbs/TemporaryDirectory.g7Vc5o/Sources/bind9/bind9/lib/isc/unix/socket.c:5580: bind: Operation not permitted
+dig: isc_socket_bind: unexpected error
+[exit 10]
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.18.197 app.team1.test A
+/AppleInternal/Library/BuildRoots/4~CZ8sugADelFZQJFGAfJN_VlgPqH9arA_2iiTnYI/Library/Caches/com.apple.xbs/TemporaryDirectory.g7Vc5o/Sources/bind9/bind9/lib/isc/unix/socket.c:5580: bind: Operation not permitted
+dig: isc_socket_bind: unexpected error
+[exit 10]
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.18.197 api.team1.test A
+/AppleInternal/Library/BuildRoots/4~CZ8sugADelFZQJFGAfJN_VlgPqH9arA_2iiTnYI/Library/Caches/com.apple.xbs/TemporaryDirectory.g7Vc5o/Sources/bind9/bind9/lib/isc/unix/socket.c:5580: bind: Operation not permitted
+dig: isc_socket_bind: unexpected error
+[exit 10]
+
+$ nc -vz -G 2 10.7.28.39 3001
+nc: connectx to 10.7.28.39 port 3001 (tcp) failed: Operation not permitted
+[exit 1]
+
+$ nc -vz -G 2 10.7.18.197 3002
+nc: connectx to 10.7.18.197 port 3002 (tcp) failed: Operation not permitted
+[exit 1]
+
+$ nc -vz -G 2 10.7.26.113 8080
+nc: connectx to 10.7.26.113 port 8080 (tcp) failed: Operation not permitted
+[exit 1]
+
+$ nc -vz -G 2 10.7.26.113 8443
+nc: connectx to 10.7.26.113 port 8443 (tcp) failed: Operation not permitted
+[exit 1]
+
+$ curl --silent --show-error --max-time 5 --resolve app.team1.test:8443:10.7.26.113 --cacert /Users/sankalpmtellur/Desktop/CN-Project/edge/certs/app.crt --include https://app.team1.test:8443/api/status
+curl: (7) Failed to connect to app.team1.test port 8443 after 0 ms: Couldn't connect to server
+[exit 7]
+
+$ curl --silent --show-error --max-time 5 --resolve api.team1.test:8443:10.7.26.113 --cacert /Users/sankalpmtellur/Desktop/CN-Project/edge/certs/app.crt --include https://api.team1.test:8443/api/status
+curl: (7) Failed to connect to api.team1.test port 8443 after 0 ms: Couldn't connect to server
+[exit 7]
