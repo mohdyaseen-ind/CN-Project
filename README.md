@@ -6,19 +6,20 @@ Course project for Phase 1 and the applicable Phase 2 extensions.
 
 | Member | Address | Services |
 |---|---:|---|
-| Prateek (this Mac) | `10.7.28.39` | Primary DNS, Backend A (`:3001`), standby nginx (`:8080`/`:8443`) |
-| Sankalp | `10.7.26.113` | Main nginx, HTTPS and load balancing |
-| Sarthak | `10.7.18.197` | Backup DNS, Backend B (`:3002`), test client and Wireshark |
+| Prateek | `10.7.28.39` | Primary DNS, Backend A (`:3001`), standby nginx (`:8080`/`:8443`) |
+| Sankalp | `10.7.26.113` | Backup DNS, main nginx, HTTPS and load balancing |
+| Sarthak | `10.7.18.197` | Backend B (`:3002`), test client and Wireshark |
 
 The expected subnet is `10.7.16.0/20`, interface `en0`, DNS port `53` TCP/UDP,
-and DNS TTL `30` seconds. These addresses are the team-provided assignments;
-only Prateek's current address and interface have been checked from this Mac.
-See [docs/IP-INVENTORY.md](docs/IP-INVENTORY.md) for measured versus assigned
-network facts and current verification limits.
+and DNS TTL `30` seconds. Current role reports show the assigned addresses are
+in range but the observed masks differ (`/20` on Prateek, `/19` on Sankalp and
+Sarthak); confirm the intended prefix before changing shared settings. See
+[docs/IP-INVENTORY.md](docs/IP-INVENTORY.md) for measured network facts.
 
-Both `app.team1.test` and `api.team1.test` currently resolve to Sankalp's main
-edge (`10.7.26.113`). Do not change either DNS server to the standby edge or
-stop primary DNS during the coordinated demonstrations without team approval.
+The primary DNS returns both names at Sankalp's main edge (`10.7.26.113`). The
+backup DNS role has moved to Sankalp; its project config is prepared, but do not
+stop primary DNS or configure client failover until remote queries to Sankalp's
+backup are verified.
 
 ## Prateek: local launch and checks
 
@@ -55,8 +56,10 @@ for an availability demonstration until Sankalp has acknowledged the test.
 - [configs/dns/dnsmasq.conf](configs/dns/dnsmasq.conf) and
   [configs/dns/team.hosts](configs/dns/team.hosts): Prateek's primary DNS
   template and current project records.
-- [configs/dns/dnsmasq-backup.conf](configs/dns/dnsmasq-backup.conf): Sarthak's
+- [configs/dns/dnsmasq-backup.conf](configs/dns/dnsmasq-backup.conf): Sankalp's
   backup DNS template.
+- [scripts/backup-dns.sh](scripts/backup-dns.sh): project-local backup DNS
+  config-test/start/status/stop/reload script; start/stop require admin rights.
 - [configs/edge/nginx.conf](configs/edge/nginx.conf): Sankalp's main-edge
   template with both assigned backend addresses.
 - [configs/edge/nginx-standby.conf](configs/edge/nginx-standby.conf): standalone
@@ -67,6 +70,12 @@ for an availability demonstration until Sankalp has acknowledged the test.
   prepared, not activated, Backend A isolation rules.
 - [docs/phase2/prateek-report.md](docs/phase2/prateek-report.md): actual
   verification results, pending coordination, and extension learning summaries.
+- [docs/phase2/sankalp-report.md](docs/phase2/sankalp-report.md): main-edge
+  integration results and remaining coordination items.
+- [docs/phase2/sarthak-report.md](docs/phase2/sarthak-report.md): Sarthak's
+  pre-reassignment DNS, Backend B, and Wireshark host report.
+- [docs/submission/README.md](docs/submission/README.md): final package map and
+  pending evidence status.
 - [docs/phase2/troubleshooting.md](docs/phase2/troubleshooting.md): DNS/TCP/TLS/HTTP
   diagnostics.
 - [evidence/phase2/prateek/README.md](evidence/phase2/prateek/README.md):
@@ -81,6 +90,7 @@ share only a public certificate/CA certificate after approval. Firewall
 activation, DNS failover, TTL mutation, Backend A failure, and edge migration
 are intentionally not run by an individual member.
 
-Terminal logs in `evidence/phase2/prateek/logs/` contain only commands actually
-run from this Mac. Screenshots are not synthesized; the evidence index gives
-the exact capture instructions for screenshots that still need manual capture.
+Role-specific terminal logs are stored in
+`evidence/phase2/{prateek,sankalp,sarthak}/logs/` and distinguish each host's
+observations. Screenshots are not synthesized; each role's evidence index lists
+the current status and exact capture commands for remaining screenshots.

@@ -4,6 +4,10 @@ Updated: 2026-11-25. This report separates directly observed results from
 team-assigned values, managed-device blockers, and coordinated tests that remain
 pending.
 
+> Historical role note: this report documents Sarthak's DNS assignment before
+> the 2026-11-26 architecture change. Backup DNS has moved to Sankalp; Sarthak
+> now owns Backend B, client testing, and Wireshark.
+
 ## 1. Role and Host Audit
 
 - **Role:** Backup DNS (`dnsmasq`), Backend B (`:3002`), test client, and Wireshark packet analysis on `10.7.18.197`.

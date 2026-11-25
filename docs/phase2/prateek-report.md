@@ -4,6 +4,9 @@ Updated: 2026-11-25. This report separates observed results from team-assigned
 values and tests that still require another laptop, administrator approval, or
 a coordinated test window.
 
+> Historical role note: this report predates the 2026-11-26 DNS role transfer.
+> Sankalp now hosts backup DNS; Sarthak's old backup-DNS checks are historical.
+
 ## Role and host audit
 
 - Role: primary DNS, Backend A, and standby nginx on `10.7.28.39`.
@@ -130,8 +133,8 @@ remote-path diagnosis remains pending teammate access.
 
 ## Pending dependencies / next coordination
 
-1. Sarthak confirms his current address and remote DNS answers on UDP and TCP
-   port 53.
+1. Prateek and Sarthak confirm Sankalp's new backup DNS answers remotely on
+   UDP and TCP port 53.
 2. Sankalp confirms his main nginx can reach Backend A at `10.7.28.39:3001`;
    Sarthak confirms Backend B is serving on `10.7.18.197:3002`.
 3. Before any PF activation, an administrator verifies the managed policy and

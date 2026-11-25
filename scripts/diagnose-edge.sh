@@ -5,14 +5,18 @@ EDGE_IP="${EDGE_IP:-10.7.26.113}"
 DNS_PRIMARY="${DNS_PRIMARY:-10.7.28.39}"
 DNS_BACKUP="${DNS_BACKUP:-10.7.18.197}"
 domains=(app.team1.test api.team1.test)
+overall_rc=0
 
 run() {
     printf '\n$'
     printf ' %q' "$@"
     printf '\n'
     "$@"
-    rc=$?
+    local rc=$?
     printf '[exit %s]\n' "$rc"
+    if [[ "$rc" -ne 0 ]]; then
+        overall_rc=1
+    fi
 }
 
 printf 'Edge diagnostic at %s\n' "$(date -Iseconds 2>/dev/null || date)"
@@ -33,3 +37,5 @@ for domain in "${domains[@]}"; do
         --cacert "$(cd -- "$(dirname -- "$0")/.." && pwd)/edge/certs/app.crt" \
         --include "https://$domain:8443/api/status"
 done
+
+exit "$overall_rc"

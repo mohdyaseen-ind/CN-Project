@@ -1,0 +1,34 @@
+Timestamp: 2026-11-26T00:05:25+05:30
+
+$ whoami; hostname; ipconfig getifaddr en0; ipconfig getoption en0 subnet_mask
+sankalpmtellur
+MacBook-Pro-7.local
+10.7.26.113
+255.255.224.0
+
+$ brew list --versions dnsmasq; brew services info dnsmasq
+dnsmasq 2.93
+dnsmasq (sh.brew.dnsmasq)
+Running: false
+Loaded: false
+Schedulable: false
+
+$ lsof -nP -iTCP:53 -iUDP:53
+
+$ socketfilterfw
+Firewall is enabled. (State = 1)
+Firewall has block all state set to disabled.
+Firewall stealth mode is off
+Incoming connection to /opt/homebrew/opt/dnsmasq/sbin/dnsmasq is permitted.
+
+$ ./scripts/backup-dns.sh config-test
+dnsmasq: syntax check OK.
+exit=0
+
+$ sudo -n -v (availability of cached administrator authorization)
+sudo: a password is required
+exit=1
+
+$ primary DNS still answers UDP/TCP
+app.team1.test.		30	IN	A	10.7.26.113
+api.team1.test.		30	IN	A	10.7.26.113
