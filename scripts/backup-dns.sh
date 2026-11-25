@@ -2,14 +2,14 @@
 set -euo pipefail
 
 ROOT="$(cd -- "$(dirname -- "$0")/.." && pwd)"
-CONF="configs/dns/dnsmasq-backup.conf"
+CONF="$ROOT/configs/dns/dnsmasq-backup.conf"
 PID_FILE="$ROOT/var/run/dnsmasq-backup.pid"
 # Homebrew must not be invoked as root. Override this path on Intel Macs with
 # DNSMASQ_BIN=/usr/local/opt/dnsmasq/sbin/dnsmasq if using this script there.
 DNSMASQ="${DNSMASQ_BIN:-/opt/homebrew/opt/dnsmasq/sbin/dnsmasq}"
 
 config_test() {
-    (cd "$ROOT" && "$DNSMASQ" --test --conf-file="$CONF")
+    "$DNSMASQ" --test --conf-file="$CONF"
 }
 
 verified_pid() {
@@ -17,7 +17,7 @@ verified_pid() {
     local pid
     pid="$(<"$PID_FILE")"
     kill -0 "$pid" 2>/dev/null &&
-        ps -p "$pid" -o command= | grep -Fq "$CONF" || return 1
+        ps -p "$pid" -o command= | grep -Fq -- "--conf-file=$CONF" || return 1
     printf '%s\n' "$pid"
 }
 
@@ -55,7 +55,7 @@ case "${1:-}" in
             printf 'Port 53 is already in use; refusing to replace the existing DNS service.\n' >&2
             exit 1
         fi
-        (cd "$ROOT" && "$DNSMASQ" --conf-file="$CONF")
+        "$DNSMASQ" --conf-file="$CONF"
         for ((attempt = 0; attempt < 30; attempt++)); do
             if pid="$(verified_pid)" &&
                 [[ "$(dig +time=1 +tries=1 +short @127.0.0.1 app.team1.test A 2>/dev/null)" == "10.7.26.113" ]] &&
