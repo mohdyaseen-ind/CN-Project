@@ -1,27 +1,22 @@
-# Role checklist
+# Three-Mac Role Checklist
 
-## Sankalp — Mac 1
-- Install dnsmasq and Wireshark
-- Configure private DNS
-- Configure clients to use Mac 1 as DNS
-- Capture DNS/TCP/TLS traffic in Wireshark
-- Save labelled captures in evidence/06-wireshark
+## Prateek — `10.7.28.39`
 
-## Prateek — Mac 2
-- Install nginx/OpenSSL
-- Generate/trust TLS certificate
-- Configure nginx reverse proxy and load balancing
-- Demonstrate HTTPS and caching
-- Maintain architecture document
+- Primary dnsmasq on UDP/TCP 53; verify local and remote queries.
+- Backend A on TCP 3001; keep running for Sankalp's integration.
+- Standby nginx on TCP 8080/8443 with the project TLS certificate.
+- Prepare, syntax-check, back up, and document reversible Backend A PF rules.
+- Collect Prateek's Phase 2 logs and screenshots without fabricating evidence.
 
-## Yaseen — Mac 3
-- Run Backend A on port 3001
-- Test LAN reachability from Mac 2
-- Help demonstrate Backend A failure
-- Maintain backend source/config bundle
+## Sankalp — `10.7.26.113`
 
-## Mathapati/Sarthak — Mac 4
-- Run Backend B on port 3002
-- Act as second test client
-- Run load-balancing and caching tests
-- Maintain evidence folder and IP inventory
+- Main nginx edge, TLS, and round-robin load balancing on 8080/8443.
+- Verify access to both backend members and confirm X-Backend headers.
+- Coordinate Backend A outage and standby edge migration with Prateek and Sarthak.
+
+## Sarthak — `10.7.18.197`
+
+- Backup dnsmasq and Backend B on TCP 3002.
+- Act as the test client; capture Wireshark evidence.
+- Confirm backup DNS answers remotely before Prateek stops primary DNS.
+- Coordinate DNS TTL/cache tests and service-isolation tests with the team.
