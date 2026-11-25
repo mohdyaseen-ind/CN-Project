@@ -1,0 +1,61 @@
+Timestamp: 2026-11-25T23:51:06+05:30
+
+$ ./scripts/diagnose-edge.sh
+Edge diagnostic at 2026-11-25T23:51:06+05:30
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.28.39 app.team1.test A
+app.team1.test.		30	IN	A	10.7.26.113
+[exit 0]
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.28.39 api.team1.test A
+api.team1.test.		30	IN	A	10.7.26.113
+[exit 0]
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.18.197 app.team1.test A
+;; connection timed out; no servers could be reached
+[exit 9]
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.18.197 api.team1.test A
+;; connection timed out; no servers could be reached
+[exit 9]
+
+$ nc -vz -G 2 10.7.28.39 3001
+Connection to 10.7.28.39 port 3001 [tcp/redwood-broker] succeeded!
+[exit 0]
+
+$ nc -vz -G 2 10.7.18.197 3002
+Connection to 10.7.18.197 port 3002 [tcp/exlm-agent] succeeded!
+[exit 0]
+
+$ nc -vz -G 2 10.7.26.113 8080
+Connection to 10.7.26.113 port 8080 [tcp/http-alt] succeeded!
+[exit 0]
+
+$ nc -vz -G 2 10.7.26.113 8443
+Connection to 10.7.26.113 port 8443 [tcp/pcsync-https] succeeded!
+[exit 0]
+
+$ curl --silent --show-error --max-time 5 --resolve app.team1.test:8443:10.7.26.113 --cacert /Users/sankalpmtellur/Desktop/CN-Project/edge/certs/app.crt --include https://app.team1.test:8443/api/status
+HTTP/2 200 
+server: nginx
+date: Wed, 25 Nov 2026 18:21:10 GMT
+content-type: application/json
+content-length: 102
+x-backend: B
+cache-control: no-store
+x-edge: primary
+
+{"backend": "B", "status": "ok", "host": "skensmac.local", "time": "2026-11-25T18:21:10.293432+00:00"}[exit 0]
+
+$ curl --silent --show-error --max-time 5 --resolve api.team1.test:8443:10.7.26.113 --cacert /Users/sankalpmtellur/Desktop/CN-Project/edge/certs/app.crt --include https://api.team1.test:8443/api/status
+HTTP/2 200 
+server: nginx
+date: Wed, 25 Nov 2026 18:21:10 GMT
+content-type: application/json
+content-length: 110
+x-backend: A
+cache-control: no-store
+x-edge: primary
+
+{"backend": "A", "status": "ok", "host": "Prateeks-MacBook.local", "time": "2026-11-25T18:21:10.356252+00:00"}[exit 0]
+diagnostic_exit=1

@@ -1,0 +1,16 @@
+Timestamp: 2026-11-25T23:45:10+05:30
+
+$ nc -vz 10.7.28.39 8080
+Connection to 10.7.28.39 port 8080 [tcp/http-alt] succeeded!
+
+$ nc -vz 10.7.28.39 8443
+Connection to 10.7.28.39 port 8443 [tcp/pcsync-https] succeeded!
+
+$ curl standby HTTP redirect with domain/SNI host
+curl: (52) Empty reply from server
+
+$ curl standby HTTPS with current local trust cert
+curl: (35) LibreSSL SSL_connect: SSL_ERROR_SYSCALL in connection to app.team1.test:8443 
+
+$ TLS server handshake
+0013FE0902000000:error:0A000126:SSL routines::unexpected eof while reading:ssl/record/rec_layer_s3.c:702:

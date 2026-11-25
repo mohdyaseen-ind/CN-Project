@@ -2,9 +2,13 @@
 set -euo pipefail
 
 ROOT="$(cd -- "$(dirname -- "$0")/.." && pwd)"
+if ! command -v brew >/dev/null 2>&1 || ! brew list --versions nginx >/dev/null 2>&1; then
+    printf 'Homebrew nginx is not installed; install it after approval, then retry.\n' >&2
+    exit 1
+fi
 NGINX="$(brew --prefix nginx)/bin/nginx"
 CONF="configs/edge/nginx.conf"
-PID_FILE="$ROOT/var/run/nginx-main.pid"
+PID_FILE="$ROOT/var/run/nginx-edge.pid"
 CERT_FILE="$ROOT/edge/certs/app.crt"
 KEY_FILE="$ROOT/edge/certs/app.key"
 if [[ -n "${EDGE_CA_FILE:-}" ]]; then
@@ -119,7 +123,7 @@ case "${1:-}" in
             sleep 0.25
         done
         printf 'Main nginx failed to start; inspect %s\n' \
-            "$ROOT/var/log/nginx-main-error.log" >&2
+            "$ROOT/var/log/nginx-edge-error.log" >&2
         exit 1
         ;;
     status)

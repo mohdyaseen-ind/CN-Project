@@ -1,0 +1,28 @@
+Backup DNS NXDOMAIN diagnosis
+Date: 2026-11-26 (Asia/Kolkata)
+
+Observed dnsmasq process:
+nobody 50135 /opt/homebrew/opt/dnsmasq/sbin/dnsmasq --conf-file=configs/dns/dnsmasq-backup.conf
+The process argument names the config relatively. The project PID file and dnsmasq log were absent; the process-specific lsof query exposed no open-file/cwd rows, so the process working directory could not be confirmed from this session.
+
+Expected hosts file, configs/dns/team.hosts:
+10.7.26.113 app.team1.test api.team1.test
+
+Observed direct queries to both 127.0.0.1 and 10.7.26.113:
+app.team1.test: NXDOMAIN over UDP and TCP
+api.team1.test: NXDOMAIN over UDP and TCP
+
+Configuration correction made:
+- local=/team1.test/
+- local-ttl=30
+- addn-hosts now points to the absolute project configs/dns/team.hosts path.
+- pid-file and log-facility now point to absolute project paths.
+- scripts/backup-dns.sh now starts and validates dnsmasq with the absolute config path.
+
+Validation after correction:
+bash -n scripts/backup-dns.sh: exit 0
+./scripts/backup-dns.sh config-test: dnsmasq: syntax check OK; exit 0
+
+git diff --check: exit 0
+
+The live resolver was not restarted in this session because sudo requires interactive administrator authentication. Prateek's primary DNS, nginx, and other services were not stopped or changed by this diagnosis. Run the grouped command in the task response to replace only the dnsmasq process whose current command line exactly matches the project backup config, start the project-managed instance, and verify all 8 local/LAN UDP/TCP answers.

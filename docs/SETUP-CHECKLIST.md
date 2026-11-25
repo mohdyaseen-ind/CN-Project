@@ -13,8 +13,8 @@
 | Member | Assignment |
 |---|---|
 | Prateek | `10.7.28.39`: primary DNS, Backend A `:3001`, standby nginx `:8080/:8443` |
-| Sankalp | `10.7.26.113`: main nginx, HTTPS/load balancing `:8080/:8443` |
-| Sarthak | `10.7.18.197`: backup DNS, Backend B `:3002`, test client/Wireshark |
+| Sankalp | `10.7.26.113`: backup dnsmasq `:53`, main nginx, HTTPS/load balancing `:8080/:8443` |
+| Sarthak | `10.7.18.197`: Backend B `:3002`, test client/Wireshark |
 
 The project names are `app.team1.test` and `api.team1.test`; both currently
 resolve to the main edge at `10.7.26.113`. DNS uses TCP and UDP port 53 and
@@ -33,9 +33,25 @@ Use the paired `stop` scripts only for the project-managed local services.
 Keep Backend A running until Sankalp confirms integration and any coordinated
 failure demonstration.
 
+## Sankalp backup DNS
+
+The project-local template listens on loopback and `10.7.26.113`, uses the
+shared hosts file, TTL 30, and public upstream forwarders. Syntax check does not
+require administrator privileges; binding port 53 does.
+
+```sh
+./scripts/backup-dns.sh config-test
+sudo ./scripts/backup-dns.sh start
+./scripts/backup-dns.sh status
+```
+
+Do not stop Prateek's primary DNS or configure client failover until Prateek
+and Sarthak confirm remote queries to Sankalp over both UDP and TCP.
+
 ## Coordination gates
 
-- Do not stop primary dnsmasq until Sarthak confirms remote backup DNS queries.
+- Do not stop Prateek's primary dnsmasq until Prateek and Sarthak both confirm
+  remote UDP/TCP queries to Sankalp's backup DNS.
 - Do not mutate DNS records until both DNS operators agree on the before/after
   values and cache/TTL demonstration window.
 - Do not stop Backend A until Sankalp confirms the high-availability test.

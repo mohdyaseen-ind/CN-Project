@@ -1,0 +1,37 @@
+Timestamp: 2026-11-25T23:50:43+05:30
+
+$ ./scripts/diagnose-edge.sh
+Edge diagnostic at 2026-11-25T23:50:43+05:30
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.28.39 app.team1.test A
+app.team1.test.		30	IN	A	10.7.26.113
+[exit 0]
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.28.39 api.team1.test A
+api.team1.test.		30	IN	A	10.7.26.113
+[exit 0]
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.18.197 app.team1.test A
+;; connection timed out; no servers could be reached
+[exit 9]
+
+$ dig +time=2 +tries=1 +noall +answer @10.7.18.197 api.team1.test A
+;; connection timed out; no servers could be reached
+[exit 9]
+
+$ nc -vz -G 2 10.7.28.39 3001
+Connection to 10.7.28.39 port 3001 [tcp/redwood-broker] succeeded!
+[exit 0]
+
+$ nc -vz -G 2 10.7.18.197 3002
+Connection to 10.7.18.197 port 3002 [tcp/exlm-agent] succeeded!
+[exit 0]
+
+$ nc -vz -G 2 10.7.26.113 8080
+Connection to 10.7.26.113 port 8080 [tcp/http-alt] succeeded!
+[exit 0]
+
+$ nc -vz -G 2 10.7.26.113 8443
+Connection to 10.7.26.113 port 8443 [tcp/pcsync-https] succeeded!
+[exit 0]
+diagnostic_exit=1

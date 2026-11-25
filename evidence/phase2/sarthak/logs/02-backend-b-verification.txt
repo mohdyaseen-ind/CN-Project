@@ -1,32 +1,69 @@
-=== Timestamp: 2026-11-25T16:46:58Z ===
---- netstat 3002 ---
-tcp4       0      0  *.3002                 *.*                    LISTEN     
-tcp4       0      0  127.0.0.1.56884        127.0.0.1.3002         TIME_WAIT  
-tcp4       0      0  127.0.0.1.56885        127.0.0.1.3002         TIME_WAIT  
---- GET / ---
+=== Timestamp: 2026-11-25T18:02:46Z ===
+--- whoami / hostname / en0 ---
+sarthakmathapati
+skensmac.local
+10.7.18.197
+	inet 10.7.18.197 netmask 0xffffe000 broadcast 10.7.31.255
+	status: active
+--- socketfilterfw ---
+Firewall is enabled. (State = 1)
+Firewall has block all state set to disabled.
+Firewall stealth mode is off
+Total number of apps = 20 
+1 : /opt/homebrew/Cellar/dnsmasq/2.93/sbin/dnsmasq 
+             (Block incoming connections)
+2 : /Users/sarthakmathapati/Library/Arduino15/packages/builtin/tools/mdns-discovery/1.1.0/mdns-discovery 
+             (Block incoming connections)
+3 : /usr/libexec/ContinuityCaptureAgent 
+             (Allow incoming connections)
+4 : /usr/libexec/clocksyncd 
+             (Allow incoming connections)
+5 : /opt/homebrew/Cellar/node/25.9.0_2/bin/node 
+             (Allow incoming connections)
+6 : /Library/Frameworks/Python.framework/Versions/3.14/Resources/Python.app 
+             (Allow incoming connections)
+7 : /System/Library/PrivateFrameworks/IDS.framework/identityservicesd.app/Contents/MacOS/identityservicesd 
+             (Allow incoming connections)
+8 : /Applications/ChatGPT.app/Contents/Frameworks/Codex Framework.framework/Versions/151.0.7922.76/Helpers/Codex (Service).app 
+             (Allow incoming connections)
+9 : /Applications/WhatsApp.app 
+             (Allow incoming connections)
+10 : /Applications/Brave Browser.app/Contents/MacOS/Brave Browser 
+             (Allow incoming connections)
+11 : /Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app 
+             (Allow incoming connections)
+12 : /Applications/Elmedia Video Player.app/Contents/MacOS/Elmedia Video Player 
+             (Allow incoming connections)
+13 : /usr/local/bin/node 
+             (Allow incoming connections)
+14 : /Applications/Google Chrome.app 
+             (Allow incoming connections)
+15 : /usr/libexec/sharingd 
+             (Allow incoming connections)
+16 : /Applications/Brave Browser.app/Contents/Frameworks/Brave Browser Framework.framework/Versions/145.1.87.191/Helpers/Brave Browser Helper.app 
+             (Allow incoming connections)
+17 : /System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter 
+             (Allow incoming connections)
+18 : /System/Library/PrivateFrameworks/ReplicatorCore.framework/Support/replicatord 
+             (Allow incoming connections)
+19 : /usr/libexec/rapportd 
+             (Allow incoming connections)
+20 : AzureFrontDoor.MicrosoftSecurity 
+             (Allow incoming connections)
+--- Backend B LAN IP 10.7.18.197:3002 ---
 HTTP/1.1 200 OK
 Server: BaseHTTP/0.6 Python/3.14.2
-Date: Wed, 25 Nov 2026 16:46:58 GMT
-X-Backend: B
-Cache-Control: no-store
-Content-Type: application/json
-Content-Length: 38
-
-{"service": "running", "backend": "B"}
---- GET /api/status ---
-HTTP/1.1 200 OK
-Server: BaseHTTP/0.6 Python/3.14.2
-Date: Wed, 25 Nov 2026 16:46:58 GMT
+Date: Wed, 25 Nov 2026 18:02:46 GMT
 X-Backend: B
 Cache-Control: no-store
 Content-Type: application/json
 Content-Length: 102
 
-{"backend": "B", "status": "ok", "host": "skensmac.local", "time": "2026-11-25T16:46:58.137746+00:00"}
---- GET /api/catalog (200) ---
+{"backend": "B", "status": "ok", "host": "skensmac.local", "time": "2026-11-25T18:02:46.180371+00:00"}
+--- Backend B /api/catalog (200) ---
 HTTP/1.1 200 OK
 Server: BaseHTTP/0.6 Python/3.14.2
-Date: Wed, 25 Nov 2026 16:46:58 GMT
+Date: Wed, 25 Nov 2026 18:02:46 GMT
 X-Backend: B
 Cache-Control: max-age=60
 ETag: "218f45a7f65b69a5"
@@ -34,14 +71,12 @@ Content-Type: application/json
 Content-Length: 57
 
 {"items": ["router", "switch", "firewall"], "version": 1}
---- GET /api/catalog If-None-Match: "218f45a7f65b69a5" (304) ---
+--- Backend B /api/catalog If-None-Match: "218f45a7f65b69a5" (304) ---
 HTTP/1.1 304 Not Modified
 Server: BaseHTTP/0.6 Python/3.14.2
-Date: Wed, 25 Nov 2026 16:46:58 GMT
+Date: Wed, 25 Nov 2026 18:02:46 GMT
 X-Backend: B
 Cache-Control: max-age=60
 ETag: "218f45a7f65b69a5"
 
-
---- LAN IP http://10.7.18.197:3002/api/status ---
 

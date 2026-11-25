@@ -1,0 +1,86 @@
+Timestamp: 2026-11-25T23:42:10+05:30
+
+$ whoami / hostname / ipconfig getifaddr en0 / ipconfig getoption en0 subnet_mask
+sankalpmtellur
+MacBook-Pro-7.local
+10.7.26.113
+255.255.224.0
+
+$ ifconfig en0
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	options=6460<TSO4,TSO6,CHANNEL_IO,PARTIAL_CSUM,ZEROINVERT_CSUM>
+	ether a6:99:c5:fb:d5:ce
+	inet6 fe80::432:b530:ee65:4102%en0 prefixlen 64 secured scopeid 0xb 
+	inet 10.7.26.113 netmask 0xffffe000 broadcast 10.7.31.255
+	nd6 options=201<PERFORMNUD,DAD>
+	media: autoselect
+	status: active
+
+$ route -n get default
+   route to: default
+destination: default
+       mask: default
+    gateway: 10.7.0.1
+  interface: en0
+      flags: <UP,GATEWAY,DONE,STATIC,PRCLONING,GLOBAL>
+ recvpipe  sendpipe  ssthresh  rtt,msec    rttvar  hopcount      mtu     expire
+       0         0         0         0         0         0      1500         0 
+
+$ ping -c 2 10.7.28.39
+PING 10.7.28.39 (10.7.28.39): 56 data bytes
+64 bytes from 10.7.28.39: icmp_seq=0 ttl=64 time=10.268 ms
+64 bytes from 10.7.28.39: icmp_seq=1 ttl=64 time=6.952 ms
+
+--- 10.7.28.39 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 6.952/8.610/10.268/1.658 ms
+
+$ ping -c 2 10.7.18.197
+PING 10.7.18.197 (10.7.18.197): 56 data bytes
+64 bytes from 10.7.18.197: icmp_seq=0 ttl=64 time=5.860 ms
+64 bytes from 10.7.18.197: icmp_seq=1 ttl=64 time=6.966 ms
+
+--- 10.7.18.197 ping statistics ---
+2 packets transmitted, 2 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 5.860/6.413/6.966/0.553 ms
+
+$ nc -vz 10.7.28.39 53
+Connection to 10.7.28.39 port 53 [tcp/domain] succeeded!
+
+$ nc -vz 10.7.28.39 3001
+Connection to 10.7.28.39 port 3001 [tcp/redwood-broker] succeeded!
+
+$ nc -vz 10.7.18.197 53
+Connection to 10.7.18.197 port 53 [tcp/domain] succeeded!
+
+$ nc -vz 10.7.18.197 3002
+Connection to 10.7.18.197 port 3002 [tcp/exlm-agent] succeeded!
+
+$ local nginx port 8080
+Connection to 10.7.26.113 port 8080 [tcp/http-alt] succeeded!
+
+$ local nginx port 8443
+Connection to 10.7.26.113 port 8443 [tcp/pcsync-https] succeeded!
+
+$ root endpoint app domain pinned to edge
+HTTP/2 200 
+server: nginx
+date: Wed, 25 Nov 2026 18:12:12 GMT
+content-type: application/json
+content-length: 38
+x-backend: B
+cache-control: no-store
+x-edge: primary
+
+{"service": "running", "backend": "B"}
+$ root endpoint api domain pinned to edge
+HTTP/2 200 
+server: nginx
+date: Wed, 25 Nov 2026 18:12:12 GMT
+content-type: application/json
+content-length: 38
+x-backend: A
+cache-control: no-store
+x-edge: primary
+
+{"service": "running", "backend": "A"}

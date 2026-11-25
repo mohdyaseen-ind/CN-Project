@@ -1,0 +1,74 @@
+Timestamp: 2026-11-25T23:49:00+05:30
+
+$ bash -n scripts/*.sh configs/tls/gen-cert.sh
+exit=0
+
+$ git diff --check
+docs/phase2/sankalp-report.md:4: trailing whitespace.
++still in progress.  
+exit=2
+
+$ ./scripts/edge-nginx.sh config-test
+nginx: the configuration file /Users/sankalpmtellur/Desktop/CN-Project/configs/edge/nginx.conf syntax is ok
+nginx: configuration file /Users/sankalpmtellur/Desktop/CN-Project/configs/edge/nginx.conf test is successful
+exit=0
+
+$ ./scripts/edge-nginx.sh status
+Main edge nginx master: pid 16958
+exit=0
+
+$ lsof -nP -iTCP:8080 -iTCP:8443 -sTCP:LISTEN
+COMMAND   PID           USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+nginx   16958 sankalpmtellur    5u  IPv4 0x4b9c03ce05916769      0t0  TCP *:8080 (LISTEN)
+nginx   16958 sankalpmtellur    6u  IPv4 0xf832ce47c7c303cf      0t0  TCP *:8443 (LISTEN)
+nginx   18869 sankalpmtellur    5u  IPv4 0x4b9c03ce05916769      0t0  TCP *:8080 (LISTEN)
+nginx   18869 sankalpmtellur    6u  IPv4 0xf832ce47c7c303cf      0t0  TCP *:8443 (LISTEN)
+
+$ brew services list (nginx row)
+Name          Status User           File
+nginx         none                           
+
+$ socketfilterfw state and nginx permission
+Firewall is enabled. (State = 1)
+Firewall has block all state set to disabled.
+Firewall stealth mode is off
+Incoming connection to /opt/homebrew/Cellar/nginx/1.31.10/bin/nginx is permitted.
+
+$ openssl verify both SAN hostnames
+edge/certs/app.crt: OK
+edge/certs/app.crt: OK
+
+$ key ignored by Git
+.gitignore:11:/edge/	edge/certs/app.key
+
+$ sha256 config/cert snapshot
+1d44a16d183507bf957eab5d423ee3991edc1873c5615733d25a61906ee06f80  configs/edge/nginx.conf
+9a42b15a4fcb71871f35153636c27af72fce2a8c5bcc345e3f2633277db56de5  configs/dns/dnsmasq.conf
+feb5d89d9ead4782fe4a053e8c5ed5cde192c52e13b0778d46ce910249fefa91  configs/dns/dnsmasq-backup.conf
+44be3d83879864dd3b41c17dc78cf6615baa871f6580e81d8fdefa94befc6a9f  configs/dns/team.hosts
+e0c422df2292aeaac873bf8b66091b63bcddbb3a390515a9be69d1e4d545ba54  configs/firewall/backend-pf.conf
+1bd2b7489cf0bf72a94d15cfc92d7eb822477ac2f33c813b91249f1ab8dcad63  configs/firewall/backend-b-pf.conf
+24fbe52fb88ecab29708bc9c76072446b55ac4b5eaf16871a3788ea0bd11e4ce  scripts/edge-nginx.sh
+4b33730e9ef03f4324078418fb590407b4f985b77bea55320e19342f156fe5ee  scripts/diagnose-edge.sh
+9b989b499cd413ddf4c51d7d8db4117b074f5cb140603e7c86d9019ac1bededb  edge/certs/app.crt
+
+$ git status --short
+ M README.md
+ M configs/edge/nginx.conf
+ M docs/ARCHITECTURE.md
+ M docs/IP-INVENTORY.md
+ M docs/phase2/sankalp-report.md
+ M docs/submission/README.md
+ M docs/submission/demo-guide.md
+ M docs/submission/viva-questions.md
+ M evidence/phase2/sankalp/README.md
+?? docs/submission/final-report.md
+?? evidence/phase2/sankalp/09-sankalp-primary-dns-test.png
+?? evidence/phase2/sankalp/logs/06-baseline-integration.txt
+?? evidence/phase2/sankalp/logs/07-additional-verification.txt
+?? evidence/phase2/sankalp/logs/08-host-and-peer-checks.txt
+?? evidence/phase2/sankalp/logs/09-dns-remote-verification.txt
+?? evidence/phase2/sankalp/logs/10-diagnostic-script.txt
+?? evidence/phase2/sankalp/logs/11-standby-edge-check.txt
+?? evidence/phase2/sankalp/logs/12-pf-rules-review.txt
+?? evidence/phase2/sankalp/logs/13-final-local-verification.txt

@@ -48,7 +48,7 @@ coordinated tests, leave the PNG absent until the team performs the test.
 
 | PNG | Contents |
 |---|---|
-| `25-current-terminal-rerun-01.png` | Backup DNS TCP reset; Backend A HTTP 200; Backend B empty reply; nginx config tests pass |
+| `25-current-terminal-rerun-01.png` | Former Sarthak DNS TCP reset; Backend A HTTP 200; Backend B empty reply; nginx config tests pass |
 | `25-current-terminal-rerun-02.png` | Standby HTTPS 200 with `X-Backend: A` and `X-Edge: standby`; current load-distribution output |
 | `25-current-terminal-rerun-03.png` | Additional all-A requests and catalog Cache-Control/ETag plus conditional 304 |
 | `25-current-terminal-rerun-04.png` | Conditional 304, TTL 30 answers, main-edge HTTP 301, and TLS verification failure |
@@ -89,31 +89,31 @@ or renamed to a different test filename.
 |---|---|---|
 | `01-network-ip-and-ping.png` | Screenshot absent | Current ping: Sankalp 2/2; Sarthak 0/2; see `25-current-evidence-rerun.txt` |
 | `02-primary-dns.png` | Screenshot absent | Current direct UDP/TCP answers and TTL 30 in `25-current-evidence-rerun.txt` |
-| `03-backup-dns.png` | Screenshot absent; current test fails | UDP timeout, TCP reset; Sarthak/admin follow-up required |
+| `03-backup-dns.png` | Screenshot absent; new service pending | Sankalp's config passes syntax, but service start/remote answers are pending admin authentication; old Sarthak DNS probes failed |
 | `04-backend-a.png` | Screenshot absent | Current HTTP 200 and `X-Backend: A` |
-| `05-backend-b.png` | Screenshot absent; current test fails | Latest direct curl returned empty reply; earlier 200 is historical only |
+| `05-backend-b.png` | Screenshot absent; source-dependent | Sankalp and Sarthak report HTTP 200; Prateek's latest direct curl returned an empty reply |
 | `06-nginx-config-validation.png` | Screenshot absent | Current standby and main config syntax checks pass on Prateek |
 | `07-https-success.png` | Screenshot absent under this name | Existing `14-standby-nginx.png` is historical verified local standby HTTPS; main-edge trust is pending |
-| `08-load-balancing.png` | Screenshot absent; current test does not pass | Six latest standby requests returned A only; earlier A/B alternation is historical |
+| `08-load-balancing.png` | Screenshot absent; source/edge-dependent | Sankalp reports main-edge A/B alternation; six latest Prateek standby requests returned A only |
 | `09-cache-control.png` | Screenshot absent | Current catalog response includes Cache-Control and ETag |
 | `10-http-304.png` | Screenshot absent | Current conditional request returned HTTP 304 |
 | `11-primary-dns-stopped.png` | NOT RUN | Requires coordinated DNS failover window |
-| `12-backup-dns-failover.png` | BLOCKED | Backup DNS is not answering remotely from Prateek |
+| `12-backup-dns-failover.png` | NOT RUN | Sankalp's backup service has not passed startup/remote checks; no failover test performed |
 | `13-primary-dns-restored.png` | NOT RUN | Primary DNS was never stopped and remains running |
 | `14-dns-ttl-before.png` | Screenshot absent; partial test | Current authority TTL 30; client-side cached result not demonstrated |
 | `15-dns-ttl-after.png` | NOT RUN | Requires both DNS operators and client |
 | `16-dns-cache-flush.png` | NOT RUN | Requires agreed TTL/cache test |
 | `17-firewall-rules-active.png` | NOT RUN | Rules are prepared only; admin/team approval required |
-| `18-edge-backend-access-success.png` | Screenshot absent; partial/current failure | Standby reaches Backend A; current direct Backend B probe is empty reply; main-edge TLS remains untrusted |
+| `18-edge-backend-access-success.png` | Screenshot absent; partial/source-dependent | Sankalp reports main edge reaches A/B; Prateek's direct B reply is empty and main-edge TLS trust fails on his client |
 | `19-direct-backend-access-blocked.png` | NOT RUN | PF isolation not activated |
 | `20-backend-a-stopped.png` | NOT RUN | Requires Sankalp confirmation and coordinated HA test |
 | `21-backend-b-failover.png` | NOT RUN | Requires coordinated HA test |
 | `22-backend-a-recovered.png` | NOT RUN | Backend A remains running |
 | `23-both-backends-down.png` | NOT RUN | Requires coordinated failure test |
-| `24-primary-edge.png` | Screenshot absent; HTTPS blocked | HTTP 301 works; HTTPS fails certificate verification (curl error 60) |
+| `24-primary-edge.png` | Screenshot absent; client-dependent | Sankalp reports locally verified HTTPS; Prateek sees HTTP 301 but TLS trust fails (curl error 60) |
 | `25-standby-edge-migration.png` | NOT RUN | Requires both DNS operators and firewall coordination |
 | `26-troubleshooting.png` | Partial | Current DNS/TCP/TLS/HTTP diagnostics are logged; controlled fault drill not run |
-| `27-final-system-verification.png` | Partial | Current evidence is logged; main edge and backup DNS remain blockers |
+| `27-final-system-verification.png` | Partial | Sankalp main edge passes locally; new backup DNS service and Prateek client trust remain incomplete |
 
 For pending coordinated tests, do not capture until the test is approved and
 actually performed. The grouped script above captures current failures

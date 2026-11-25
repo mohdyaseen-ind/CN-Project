@@ -1,0 +1,24 @@
+Timestamp: 2026-11-25T23:47:57+05:30
+
+$ /sbin/pfctl -nf configs/firewall/backend-pf.conf
+pfctl: Use of -f option, could result in flushing of rules
+present in the main ruleset added by the system at startup.
+See /etc/pf.conf for further details.
+
+exit=0
+
+$ /sbin/pfctl -nf configs/firewall/backend-b-pf.conf
+pfctl: Use of -f option, could result in flushing of rules
+present in the main ruleset added by the system at startup.
+See /etc/pf.conf for further details.
+
+exit=0
+
+$ /sbin/pfctl -s info (read only)
+pfctl: /dev/pf: Permission denied
+
+$ /sbin/pfctl -a com.apple/cnproject/backend-a -sr
+pfctl: /dev/pf: Permission denied
+
+$ /sbin/pfctl -a com.apple/cnproject/backend-b -sr
+pfctl: /dev/pf: Permission denied

@@ -1,8 +1,11 @@
 # Phase 2 Report — Prateek
 
-Updated: 2026-11-26 00:04 IST. This report separates observed results from
+Updated: 2026-11-26 01:07 IST. This report separates observed results from
 team-assigned values and tests that still require another laptop, administrator
 approval, or a coordinated test window.
+
+> Historical role note: this report predates the 2026-11-26 DNS role transfer.
+> Sankalp now hosts backup DNS; Sarthak's old backup-DNS checks are historical.
 
 ## Role and host audit
 
@@ -17,9 +20,9 @@ approval, or a coordinated test window.
 - Existing project certificate is valid through 2027-10-05, contains SANs for
   both domains, verifies against the local public CA certificate, and matches
   its local private key. The private key remains ignored by Git.
-- Sarthak's report records `10.7.18.197/19`, which differs from the expected
-  `/20`; Sankalp's interface/mask remain unverified. At 23:54, Sankalp
-  responded to ping (2/2); Sarthak did not (0/2).
+- Sankalp and Sarthak's host reports record `/19` masks, which differ from the
+  expected `/20`. At 23:54, Sankalp responded to ping (2/2); Sarthak did not
+  (0/2).
 - macOS Application Firewall on this Mac reports enabled (`State = 1`).
   No PF rules were activated or changed.
 
@@ -28,7 +31,7 @@ approval, or a coordinated test window.
 | Requirement | Result observed at that time |
 |---|---|
 | Primary DNS UDP/TCP | Both names answer `10.7.26.113` with TTL 30 |
-| Backup DNS UDP/TCP from Prateek | UDP times out; TCP connection resets |
+| Former backup DNS at Sarthak (`10.7.18.197`) | UDP times out; TCP connection resets; this was before the role transfer |
 | Backend A from Prateek | `/api/status` HTTP 200, `X-Backend: A` |
 | Backend B from Prateek | Direct `/api/status` HTTP 200, `X-Backend: B` |
 | Standby HTTPS | Six verified HTTP/2 200 responses alternate `A`, `B`; every response has `X-Edge: standby` |
@@ -69,10 +72,31 @@ The non-disruptive checks were rerun and saved to
 | Standby distribution | Six fresh HTTPS requests all returned `X-Backend: A`; no current A/B alternation. Earlier alternation is historical and Backend B is presently unverified |
 | Nginx config | Standby and main-edge config syntax tests pass on Prateek; main edge was not started |
 | Main edge | HTTP 301 redirect works; HTTPS trust probe fails with curl error 60 for a self-signed certificate |
-| Backup DNS | UDP query timed out; TCP reported connection reset (no DNS answer) |
+| Former Sarthak DNS address (`10.7.18.197`) | UDP query timed out; TCP reported connection reset; not a test of Sankalp's new backup service |
 
 These are observed results, not diagnoses of the underlying network cause.
 No DNS/service configuration was changed and no coordinated test was run.
+
+## DNS role-transfer update — 2026-11-26 00:07 IST
+
+Sankalp's report records that backup DNS moved to `10.7.26.113`. The
+project-managed config passes syntax validation, but the service has not been
+started because interactive administrator authentication is required. An
+already-running dnsmasq process was observed using a relative config path and
+returning NXDOMAIN for both project names; the config/script paths were
+corrected, and restarting only that process through the project script remains
+pending approval/authentication. The 23:53 Prateek probes to
+`10.7.18.197:53` above predate or target the former assignment; they do not
+verify the new backup resolver.
+
+Sankalp also reports the main edge running locally: HTTP redirect, HTTPS with
+explicit self-signed certificate trust, upstream Backend A/B responses,
+round-robin headers, catalog cache headers, and TLS 1.2/1.3 passed from his
+host. Prateek's 23:53 client still rejects that self-signed certificate with
+curl error 60. Sankalp and Sarthak report Backend B responding, while
+Prateek's earlier direct probe returned an empty reply; the source-dependent
+discrepancy remains unresolved. See `docs/phase2/sankalp-report.md` and the
+Sankalp DNS diagnostic logs.
 
 ## Checkpoint 1 — Primary DNS and Backend A
 
@@ -83,7 +107,8 @@ No DNS/service configuration was changed and no coordinated test was run.
 | TTL is 30 seconds | Verified in direct DNS answers |
 | DNS forwarding | `example.com` resolved through primary DNS |
 | Remote client query to primary | Sarthak's report records successful UDP/TCP queries from his host |
-| Backup DNS at `10.7.18.197` | Current remote UDP timeout and TCP reset; blocked pending Sarthak/admin diagnosis |
+| Former backup DNS at `10.7.18.197` | Historical UDP timeout and TCP reset; backup role has moved to Sankalp |
+| New backup DNS at `10.7.26.113` | Config syntax passes; service startup/remote UDP-TCP verification pending admin authentication |
 | Backend A (`0.0.0.0:3001`) | Running; `/` and `/api/status` return HTTP 200 with `X-Backend: A` |
 | Backend A cache | `/api/catalog` returned `Cache-Control`, ETag, then HTTP 304 for the matching conditional request |
 
@@ -131,7 +156,7 @@ No coordinated failure or migration test was initiated:
 
 | Demonstration | Current status |
 |---|---|
-| DNS failover | Pending remote backup-DNS confirmation from Sarthak |
+| DNS failover | Pending authorized start and remote verification of Sankalp's backup DNS; client test from Sarthak follows |
 | DNS TTL/cache mutation | Pending both DNS operators and Sarthak's client |
 | Backend A isolation | Not activated; pending Phase 1 reachability, admin and team approval |
 | Backend A high availability | Not run; keep Backend A running until Sankalp acknowledges |
@@ -167,10 +192,11 @@ without PNGs.
 
 **Extension A — DNS failover.** Redundant DNS only provides useful failover
 when the client is configured with both reachable resolvers and both servers
-answer the same project zone consistently. A primary outage test must first
-prove that Sarthak can query backup DNS remotely, then stop only the primary
-for the agreed window and restore it afterward. The backup query timed out over
-UDP and reset over TCP from this Mac, so no failover result is claimed.
+answer the same project zone consistently. The backup role moved to Sankalp;
+the config is syntax-valid, but the service needs an authorized start and
+remote UDP/TCP verification before any primary outage test. The failed
+23:53 query targeted Sarthak's former backup address, so it is not a test of
+the new resolver and no failover result is claimed.
 
 **Extension B — DNS TTL and cache behavior.** A DNS answer's TTL controls how
 long a recursive client may reuse a cached record, so changing an authoritative
@@ -213,17 +239,22 @@ remote-path diagnosis remains pending teammate access.
 
 ## Pending dependencies / next coordination
 
-1. Sarthak confirms current remote DNS UDP/TCP behavior and rechecks the
-   managed firewall profile with the administrator. The `/19` versus expected
-   `/20` mask discrepancy also needs confirmation.
-2. Sankalp confirms the main-edge self-signed certificate fingerprint and
-   shares/approves the public certificate for client trust. Then verify
-   `/api/status`, both backend identities, and load balancing without `-k`.
-3. Before any PF activation, an administrator verifies the managed policy and
+1. Sankalp starts only the project-managed backup dnsmasq from an authenticated
+   Terminal session, resolves the existing NXDOMAIN process/config mismatch,
+   then verifies local UDP/TCP answers. Prateek and Sarthak independently test
+   the new backup resolver at `10.7.26.113:53`.
+2. Sankalp confirms main-edge upstream health and independently confirms the
+   certificate fingerprint with Prateek; share/approve only the public cert or
+   trust instructions. Prateek then tests `/api/status` and both backend
+   identities without `-k`.
+3. Sarthak and Sankalp reconcile the Backend B result: both report it working,
+   while Prateek's latest direct probe returned an empty reply.
+4. The `/19` masks reported by Sankalp and Sarthak versus the expected `/20`
+   require network-administrator confirmation.
+5. Before any PF activation, an administrator verifies the managed policy and
    active anchor and approves the specific temporary rule.
-4. The team schedules DNS failover, TTL, service-isolation, HA, and migration
-   demonstrations. Until then, keep primary DNS and Backend A running; Backend
-   B's current service state is unverified.
+6. The team schedules DNS failover, TTL, service-isolation, HA, and migration
+   demonstrations. Until then, keep primary DNS and Backend A running.
 
 ## Current completion status
 
@@ -231,15 +262,16 @@ remote-path diagnosis remains pending teammate access.
 |---|---|---|---|
 | Prateek identity/IP/subnet | PARTIAL (current) | `25-current-evidence-rerun.txt`; `10.7.28.39/20`, Sankalp ping 2/2, Sarthak ping 0/2 | Confirm Sarthak reachability |
 | Primary DNS / 30s TTL | PASS (local) | `25-current-evidence-rerun.txt`; UDP/TCP answers and TTL 30 | Capture screenshot; client cache test remains pending |
-| Backup DNS remote service | BLOCKED | Same log: UDP timeout, TCP reset | Sarthak/admin diagnose managed firewall |
+| Former backup DNS at Sarthak | HISTORICAL FAILURE | Same log: UDP timeout, TCP reset to `10.7.18.197` before role transfer | Do not treat as test of new backup host |
+| New backup DNS at Sankalp | PENDING | Sankalp report: config syntax passes; service not started; earlier wrong-config process returned NXDOMAIN | Authorized project-script start, local/remote UDP-TCP verification |
 | Backend A | PASS | `03-backend-a-status.txt`; HTTP 200, `X-Backend: A` | Keep running |
-| Backend B remote service | BLOCKED (latest probe) | `25-current-evidence-rerun.txt`; empty reply; earlier HTTP 200 is historical | Sarthak/admin recheck service and managed firewall |
+| Backend B reachability | SOURCE-DEPENDENT | Sankalp/Sarthak report HTTP 200; Prateek's `25-current-evidence-rerun.txt` returned empty reply | Reconcile source-dependent result |
 | Standby HTTPS | PASS (current probe) | Same log; HTTP/2 200, `X-Backend: A`, `X-Edge: standby` | Capture screenshot in interactive Terminal |
-| Standby load balancing | BLOCKED (latest probe) | Same log; six requests returned A only; Backend B direct probe failed | Verify Backend B before claiming round-robin |
+| Standby load balancing | PARTIAL / SOURCE-DEPENDENT | Prateek's six requests returned A only; Sankalp reports main-edge A/B alternation | Verify Backend B and capture each edge independently |
 | Standby nginx upgrade | PENDING | `21-nginx-binary-runtime-version.txt`; installed 1.31.10, active service still 1.31.6 | Coordinate restart after Sankalp confirms no dependency on current standby |
-| Main-edge listeners/redirect | PASS (TCP/HTTP only) | `22-main-edge-first-check.txt`; ports open and HTTP 301 works | Verify TLS trust and upstream responses |
-| Main-edge TLS/client trust | BLOCKED | Same log plus `24-main-edge-cert-fingerprint.txt`; self-signed cert, curl error 60 | Confirm fingerprint out of band and configure approved trust |
-| Main-edge config | PASS (syntax only, Prateek host) | `20-main-edge-config-test-fixed.txt` | Sankalp validates and starts on his host |
+| Main-edge listeners/redirect | PASS | Sankalp report: project edge running; Prateek's probe sees HTTP 301 | Preserve service during coordinated tests |
+| Main-edge TLS/client trust | PASS on Sankalp / BLOCKED on Prateek | Sankalp verifies with explicit local certificate trust; Prateek gets curl error 60 | Confirm fingerprint out of band and configure approved client trust |
+| Main-edge config | PASS | Syntax tests passed on Prateek and Sankalp; Sankalp reports project service running | Keep main-edge config and PID/log paths aligned |
 | Firewall isolation / PF active state | PENDING | Existing dry-run only; no rules activated | Admin/team authorization and coordinated test |
 | DNS failover, TTL mutation, HA outage, migration | PENDING | No disruptive tests performed | Team test window and required approvals |
 | Wireshark packet captures | PENDING | Sarthak's guide/index only | Capture after main-edge TLS trust and remote DNS are resolved |

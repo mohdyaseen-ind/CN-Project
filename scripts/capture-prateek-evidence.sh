@@ -48,10 +48,10 @@ show_primary_dns() {
 }
 
 show_backup_dns() {
-    printf '%s\n' '--- backup DNS UDP result ---'
-    run_check dig +time=2 +tries=1 +comments +stats @10.7.18.197 app.team1.test A
-    printf '%s\n' '--- backup DNS TCP result ---'
-    run_check dig +tcp +time=2 +tries=1 +comments +stats @10.7.18.197 app.team1.test A
+    printf '%s\n' '--- Sankalp backup DNS UDP result ---'
+    run_check dig +time=2 +tries=1 +comments +stats @10.7.26.113 app.team1.test A
+    printf '%s\n' '--- Sankalp backup DNS TCP result ---'
+    run_check dig +tcp +time=2 +tries=1 +comments +stats @10.7.26.113 app.team1.test A
 }
 
 show_backend_a() {

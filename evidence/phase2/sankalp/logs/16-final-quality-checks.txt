@@ -1,0 +1,64 @@
+Timestamp: 2026-11-25T23:51:56+05:30
+
+$ bash -n scripts/*.sh configs/tls/gen-cert.sh
+exit=0
+
+$ git diff --check
+exit=0
+
+$ nginx config-test
+nginx: the configuration file /Users/sankalpmtellur/Desktop/CN-Project/configs/edge/nginx.conf syntax is ok
+nginx: configuration file /Users/sankalpmtellur/Desktop/CN-Project/configs/edge/nginx.conf test is successful
+exit=0
+
+$ grep obsolete four-Mac references in current docs
+exit=1
+
+$ pcapng evidence files
+
+$ current phase2 Sankalp evidence files
+evidence/phase2/sankalp/09-sankalp-primary-dns-test.png
+evidence/phase2/sankalp/README.md
+evidence/phase2/sankalp/logs/00-audit-and-connectivity.txt
+evidence/phase2/sankalp/logs/01-tls-setup.txt
+evidence/phase2/sankalp/logs/02-local-validation.txt
+evidence/phase2/sankalp/logs/03-dependency-and-diagnostic-audit.txt
+evidence/phase2/sankalp/logs/04-homebrew-nginx-install.txt
+evidence/phase2/sankalp/logs/05-config-snapshot-hashes.txt
+evidence/phase2/sankalp/logs/06-baseline-integration.txt
+evidence/phase2/sankalp/logs/07-additional-verification.txt
+evidence/phase2/sankalp/logs/08-host-and-peer-checks.txt
+evidence/phase2/sankalp/logs/09-dns-remote-verification.txt
+evidence/phase2/sankalp/logs/10-diagnostic-script.txt
+evidence/phase2/sankalp/logs/11-standby-edge-check.txt
+evidence/phase2/sankalp/logs/12-pf-rules-review.txt
+evidence/phase2/sankalp/logs/13-final-local-verification.txt
+evidence/phase2/sankalp/logs/14-diagnostic-script-final.txt
+evidence/phase2/sankalp/logs/15-diagnostic-script-final.txt
+evidence/phase2/sankalp/logs/16-final-quality-checks.txt
+
+$ git status --short
+ M README.md
+ M configs/edge/nginx.conf
+ M docs/ARCHITECTURE.md
+ M docs/IP-INVENTORY.md
+ M docs/phase2/sankalp-report.md
+ M docs/submission/README.md
+ M docs/submission/demo-guide.md
+ M docs/submission/viva-questions.md
+ M evidence/01-lan/README.txt
+ M evidence/phase2/sankalp/README.md
+ M scripts/diagnose-edge.sh
+?? docs/submission/final-report.md
+?? evidence/phase2/sankalp/09-sankalp-primary-dns-test.png
+?? evidence/phase2/sankalp/logs/06-baseline-integration.txt
+?? evidence/phase2/sankalp/logs/07-additional-verification.txt
+?? evidence/phase2/sankalp/logs/08-host-and-peer-checks.txt
+?? evidence/phase2/sankalp/logs/09-dns-remote-verification.txt
+?? evidence/phase2/sankalp/logs/10-diagnostic-script.txt
+?? evidence/phase2/sankalp/logs/11-standby-edge-check.txt
+?? evidence/phase2/sankalp/logs/12-pf-rules-review.txt
+?? evidence/phase2/sankalp/logs/13-final-local-verification.txt
+?? evidence/phase2/sankalp/logs/14-diagnostic-script-final.txt
+?? evidence/phase2/sankalp/logs/15-diagnostic-script-final.txt
+?? evidence/phase2/sankalp/logs/16-final-quality-checks.txt
