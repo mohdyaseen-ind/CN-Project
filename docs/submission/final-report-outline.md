@@ -30,7 +30,7 @@ path. Link each result to its command log, screenshot, or packet capture.
 For each extension, report implementation, test method, actual output, outcome,
 evidence path, and one learning-summary paragraph:
 
-1. Backup DNS failover — pending verified Sarthak test.
+1. Backup DNS failover — pending Sankalp service start and remote verification by Prateek and Sarthak.
 2. DNS TTL and cache — pending cache-aware system resolver evidence.
 3. Service isolation — pending authorized edge/backend and client checks.
 4. High availability — pending coordinated Backend A failure and recovery.

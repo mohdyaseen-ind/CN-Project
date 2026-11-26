@@ -1,0 +1,60 @@
+Timestamp: 2026-11-25T23:38:06+05:30
+
+$ ./scripts/edge-nginx.sh config-test
+nginx: the configuration file /Users/sankalpmtellur/Desktop/CN-Project/configs/edge/nginx.conf syntax is ok
+nginx: configuration file /Users/sankalpmtellur/Desktop/CN-Project/configs/edge/nginx.conf test is successful
+
+$ ./scripts/edge-nginx.sh reload
+nginx: the configuration file /Users/sankalpmtellur/Desktop/CN-Project/configs/edge/nginx.conf syntax is ok
+nginx: configuration file /Users/sankalpmtellur/Desktop/CN-Project/configs/edge/nginx.conf test is successful
+2026/11/25 23:38:06 [notice] 18864#0: signal process started
+Reload requested for main edge nginx (pid 16958).
+
+$ ./scripts/edge-nginx.sh status
+Main edge nginx master: pid 16958
+
+$ repeated HTTPS status responses
+#1 HTTP/2 200 
+x-backend: A
+x-edge: primary
+#2 HTTP/2 200 
+x-backend: B
+x-edge: primary
+#3 HTTP/2 200 
+x-backend: A
+x-edge: primary
+#4 HTTP/2 200 
+x-backend: B
+x-edge: primary
+#5 HTTP/2 200 
+x-backend: A
+x-edge: primary
+#6 HTTP/2 200 
+x-backend: B
+x-edge: primary
+
+$ HTTP -> HTTPS redirect
+HTTP/1.1 301 Moved Permanently
+Location: https://app.team1.test:8443/api/status
+
+$ catalog cache headers
+HTTP/2 200 
+x-backend: A
+cache-control: max-age=60
+etag: "218f45a7f65b69a5"
+x-edge: primary
+
+$ conditional If-None-Match "218f45a7f65b69a5"
+HTTP/2 304 
+x-backend: A
+etag: "218f45a7f65b69a5"
+x-edge: primary
+
+$ TLS 1.2 forced
+curl: unknown --write-out variable: 'ssl_version'
+tls= http=2 status=200
+
+$ TLS 1.3 forced
+curl: (4) A requested feature, protocol or option was not found built-in in this libcurl due to a build-time decision.
+curl: unknown --write-out variable: 'ssl_version'
+tls= http=0 status=000

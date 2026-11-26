@@ -1,0 +1,36 @@
+Timestamp: 2026-11-25T23:42:38+05:30
+
+=== DNS server 10.7.28.39 UDP project records ===
+app.team1.test.		30	IN	A	10.7.26.113
+api.team1.test.		30	IN	A	10.7.26.113
+
+=== DNS server 10.7.28.39 TCP project records ===
+app.team1.test.		30	IN	A	10.7.26.113
+api.team1.test.		30	IN	A	10.7.26.113
+
+=== DNS server 10.7.28.39 UDP forwarding example.com ===
+example.com.		300	IN	A	104.20.23.154
+example.com.		300	IN	A	172.66.147.243
+
+=== DNS server 10.7.28.39 TCP forwarding example.com ===
+example.com.		300	IN	A	104.20.23.154
+example.com.		300	IN	A	172.66.147.243
+
+=== DNS server 10.7.18.197 UDP project records ===
+;; connection timed out; no servers could be reached
+;; connection timed out; no servers could be reached
+
+=== DNS server 10.7.18.197 TCP project records ===
+;; communications error to 10.7.18.197#53: connection reset
+;; communications error to 10.7.18.197#53: connection reset
+
+=== DNS server 10.7.18.197 UDP forwarding example.com ===
+;; connection timed out; no servers could be reached
+
+=== DNS server 10.7.18.197 TCP forwarding example.com ===
+;; communications error to 10.7.18.197#53: connection reset
+
+=== Current Wi-Fi DNS settings before any change ===
+There aren't any DNS Servers set on Wi-Fi.
+
+=== System resolver current project lookup ===

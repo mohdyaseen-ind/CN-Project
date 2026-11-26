@@ -1,0 +1,22 @@
+Timestamp: 2026-11-26T00:07:37+05:30
+
+$ bash -n scripts/backup-dns.sh
+exit=0
+
+$ ./scripts/backup-dns.sh config-test
+dnsmasq: syntax check OK.
+exit=0
+
+$ port 53 still free
+
+$ current project DNS record file
+# Current records on Prateek's primary and Sankalp's backup DNS point to the main edge.
+10.7.26.113 app.team1.test api.team1.test
+
+$ primary DNS remains online
+app.team1.test.		30	IN	A	10.7.26.113
+api.team1.test.		30	IN	A	10.7.26.113
+
+$ sudo -n authorization check (no credentials requested)
+sudo: a password is required
+exit=1

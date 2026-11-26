@@ -1,2 +1,2 @@
-# Current records on both DNS servers point to Sankalp's main edge.
+# Current records on Prateek's primary and Sankalp's backup DNS point to the main edge.
 10.7.26.113 app.team1.test api.team1.test

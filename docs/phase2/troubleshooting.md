@@ -17,10 +17,11 @@ dig @10.7.28.39 example.com A
 From Sarthak's client, test both assigned DNS servers directly:
 
 ```sh
-dig @10.7.28.39 app.team1.test A
-dig +tcp @10.7.28.39 app.team1.test A
-dig @10.7.18.197 app.team1.test A
-dig +tcp @10.7.18.197 app.team1.test A
+dig +time=2 +tries=1 @10.7.28.39 app.team1.test A
+dig +tcp +time=2 +tries=1 @10.7.28.39 api.team1.test A
+dig +time=2 +tries=1 @10.7.26.113 app.team1.test A
+dig +tcp +time=2 +tries=1 @10.7.26.113 api.team1.test A
+dig @10.7.26.113 example.com A
 scutil --dns
 ```
 

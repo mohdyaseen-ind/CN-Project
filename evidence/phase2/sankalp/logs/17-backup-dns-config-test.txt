@@ -1,0 +1,14 @@
+Timestamp: 2026-11-25T23:59:42+05:30
+
+$ command -v dnsmasq
+/opt/homebrew/sbin/dnsmasq
+
+$ brew --prefix dnsmasq
+/opt/homebrew/opt/dnsmasq
+
+$ bash -n scripts/backup-dns.sh
+exit=0
+
+$ ./scripts/backup-dns.sh config-test
+dnsmasq: syntax check OK.
+exit=0

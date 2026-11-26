@@ -1,0 +1,97 @@
+Timestamp: 2026-11-25T23:38:43+05:30
+
+$ /opt/homebrew/opt/openssl@4/bin/openssl s_client -tls1_2 (app.team1.test)
+CONNECTION ESTABLISHED
+Protocol version: TLSv1.2
+Ciphersuite: ECDHE-RSA-AES256-GCM-SHA384
+Peer certificate: CN=app.team1.test
+Hash used: SHA256
+Signature type: rsa_pss_rsae_sha256
+Verification: OK
+Verified peername: app.team1.test
+Supported Elliptic Curve Point Formats: uncompressed
+Peer Temp Key: X25519, 253 bits
+DONE
+exit=0
+
+$ /opt/homebrew/opt/openssl@4/bin/openssl s_client -tls1_3 (app.team1.test)
+CONNECTION ESTABLISHED
+Protocol version: TLSv1.3
+Ciphersuite: TLS_AES_256_GCM_SHA384
+Peer certificate: CN=app.team1.test
+Hash used: SHA256
+Signature type: rsa_pss_rsae_sha256
+Verification: OK
+Verified peername: app.team1.test
+Negotiated TLS1.3 group: X25519MLKEM768
+DONE
+exit=0
+
+$ /opt/homebrew/opt/openssl@4/bin/openssl s_client -tls1_3 (api.team1.test)
+CONNECTION ESTABLISHED
+Protocol version: TLSv1.3
+Ciphersuite: TLS_AES_256_GCM_SHA384
+Peer certificate: CN=app.team1.test
+Hash used: SHA256
+Signature type: rsa_pss_rsae_sha256
+Verification: OK
+Verified peername: api.team1.test
+Negotiated TLS1.3 group: X25519MLKEM768
+DONE
+exit=0
+
+$ dscacheutil -q host -a name app.team1.test
+
+$ dscacheutil -q host -a name api.team1.test
+
+$ scutil --dns
+DNS configuration
+
+resolver #1
+  nameserver[0] : 8.8.8.8
+  nameserver[1] : 10.5.7.1
+  if_index : 11 (en0)
+  flags    : Request A records
+  reach    : 0x00000002 (Reachable)
+
+resolver #2
+  domain   : local
+  options  : mdns
+  timeout  : 5
+  flags    : Request A records
+  reach    : 0x00000000 (Not Reachable)
+  order    : 300000
+
+resolver #3
+  domain   : 254.169.in-addr.arpa
+  options  : mdns
+  timeout  : 5
+  flags    : Request A records
+  reach    : 0x00000000 (Not Reachable)
+  order    : 300200
+
+resolver #4
+  domain   : 8.e.f.ip6.arpa
+  options  : mdns
+  timeout  : 5
+  flags    : Request A records
+
+$ dig primary UDP/TCP
+app.team1.test.		30	IN	A	10.7.26.113
+api.team1.test.		30	IN	A	10.7.26.113
+
+$ dig backup UDP/TCP
+;; connection timed out; no servers could be reached
+;; communications error to 10.7.18.197#53: connection reset
+
+$ curl api domain pinned to local edge
+HTTP/2 200 
+server: nginx
+date: Wed, 25 Nov 2026 18:08:45 GMT
+content-type: application/json
+content-length: 110
+x-backend: A
+cache-control: no-store
+x-edge: primary
+
+{"backend": "A", "status": "ok", "host": "Prateeks-MacBook.local", "time": "2026-11-25T18:08:45.836621+00:00"}
