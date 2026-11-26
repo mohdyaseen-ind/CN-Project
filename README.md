@@ -1,124 +1,356 @@
 # Private Network Service Platform
 
-Course project for Phase 1 and the applicable Phase 2 extensions.
+A Computer Networks course project focused on designing, implementing and testing a private network service infrastructure using macOS laptops connected over a local area network (LAN).
 
-## Three-laptop design
+The project is divided into two phases:
 
-| Member | Address | Services |
-|---|---:|---|
-| Prateek | `10.7.28.39` | Primary DNS, Backend A (`:3001`), standby nginx (`:8080`/`:8443`) |
-| Sankalp | `10.7.26.113` | Backup DNS, main nginx, HTTPS and load balancing |
-| Sarthak | `10.7.18.197` | Backend B (`:3002`), test client and Wireshark |
+- **Phase 1 — Build and Observe:** Establishing the core networking infrastructure using four laptops.
+- **Phase 2 — Harden and Recover:** Extending the infrastructure with security, redundancy and fault recovery using three laptops.
 
-The expected subnet is `10.7.16.0/20`, interface `en0`, DNS port `53` TCP/UDP,
-and DNS TTL `30` seconds. Current role reports show the assigned addresses are
-in range but the observed masks differ (`/20` on Prateek, `/19` on Sankalp and
-Sarthak); confirm the intended prefix before changing shared settings. See
-[docs/IP-INVENTORY.md](docs/IP-INVENTORY.md) for measured versus assigned
-network facts and current verification limits.
+---
 
-The primary currently resolves both `app.team1.test` and `api.team1.test` to
-Sankalp's main edge (`10.7.26.113`). Backup DNS has moved from Sarthak to
-Sankalp. Its project configuration passes syntax validation, but the service
-has not yet been started and verified remotely; an existing incorrectly
-launched process returned NXDOMAIN. Do not stop primary DNS or configure client
-failover until Sankalp's backup answers are verified over UDP and TCP.
+# Phase 1 — Build and Observe
 
-## Prateek: local launch and checks
+## Overview
 
-Requires Python 3 and Homebrew nginx. This repository's scripts use project-local
-state/log files under `var/`, which is git-ignored.
+Phase 1 focuses on establishing a functional private network that demonstrates DNS resolution, HTTPS communication, reverse proxy, load balancing, backend services, HTTP caching and network packet analysis.
 
-```sh
-./scripts/backend-a-start.sh
-./scripts/backend-a-status.sh
-./scripts/standby-nginx.sh config-test
-./scripts/standby-nginx.sh start
-./scripts/standby-nginx.sh status
+The infrastructure was distributed across four macOS laptops.
+
+## Team Members and Responsibilities
+
+| Member | Machine | Responsibility |
+|---|---|---|
+| Sankalp | Mac 1 | Primary DNS Server and Wireshark |
+| Prateek | Mac 2 | nginx Reverse Proxy, HTTPS/TLS and Load Balancing |
+| Mohammed Yaseen | Mac 3 | Backend A |
+| Sarthak Mathapati | Mac 4 | Backend B and Test Client |
+
+## Network Architecture
+
+```text
+                  Client
+                     |
+                     v
+               Private DNS
+                 Sankalp
+                     |
+              DNS Resolution
+                     |
+                     v
+             nginx Reverse Proxy
+                 Prateek
+               HTTPS / TLS
+                     |
+              Load Balancing
+               /          \
+              v            v
+         Backend A      Backend B
+           Yaseen        Sarthak
+          Port 3001     Port 3002
 ```
 
-After editing the standby configuration, run `./scripts/standby-nginx.sh reload`
-to validate it and gracefully reload only the project-managed nginx process.
+## Implementation
 
-## Sankalp: main-edge launch
+### 1. Private LAN Configuration
 
-On Sankalp's Mac only, install nginx through the authorized Homebrew setup if
-needed, verify both configured upstreams, then use the project-specific
-lifecycle script. Do not start the default Homebrew nginx service.
+- Established a local network connecting four macOS laptops.
+- Identified machine IP addresses, network interfaces and gateways.
+- Performed network connectivity tests using ping.
+- Documented the network topology and machine responsibilities.
 
-```sh
-./scripts/edge-nginx.sh upstreams
-./scripts/edge-nginx.sh config-test
-./scripts/edge-nginx.sh start
-./scripts/edge-nginx.sh status
-./scripts/edge-nginx.sh probe
+### 2. Private DNS Server
+
+- Configured dnsmasq on Sankalp's Mac.
+- Established private domain records for `app.team1.test` and `api.team1.test`.
+- Configured domain resolution to Prateek's nginx edge server.
+- Tested DNS resolution using dig.
+
+### 3. Backend Application Services
+
+Implemented two Python-based backend application servers.
+
+| Backend | Member | Port |
+|---|---|---|
+| Backend A | Mohammed Yaseen | 3001 |
+| Backend B | Sarthak Mathapati | 3002 |
+
+Application endpoints:
+
+- `/` — Basic application response.
+- `/api/status` — Backend identity and service status.
+- `/api/catalog` — Catalog data with caching support.
+
+The `X-Backend` response header identifies the backend serving each request.
+
+### 4. Reverse Proxy and Load Balancing
+
+- Configured nginx on Prateek's Mac.
+- Implemented round-robin load balancing.
+- Distributed incoming requests between Backend A and Backend B.
+- Verified backend identification through HTTP response headers.
+
+### 5. HTTPS and TLS
+
+- Generated local TLS certificates using OpenSSL.
+- Configured secure HTTPS communication.
+- Implemented HTTP-to-HTTPS redirection.
+- Established TLS termination at the nginx reverse proxy.
+
+### 6. HTTP Caching
+
+Implemented HTTP caching using:
+
+- Cache-Control
+- ETag
+- If-None-Match
+- HTTP 304 Not Modified
+
+These mechanisms reduce unnecessary data transmission and improve communication efficiency.
+
+### 7. Network Packet Analysis
+
+Used Wireshark to observe network communication, including:
+
+- DNS resolution.
+- TCP connection establishment.
+- TLS handshake.
+- Certificate information.
+- Encrypted application traffic.
+
+### 8. Controlled Failure Scenarios
+
+The Phase 1 evidence includes demonstrations of:
+
+- Incorrect DNS server configuration.
+- Incorrect DNS records.
+- Backend A failure.
+- Both backends becoming unavailable.
+- Incorrect destination port.
+
+## Phase 1 Outcome
+
+Phase 1 established the foundational networking infrastructure using four distributed machines and demonstrated the interaction between DNS, TCP, TLS, HTTP, reverse proxy and backend application services.
+
+The original Phase 1 evidence is preserved in the repository.
+
+---
+
+# Phase 2 — Harden and Recover
+
+## Overview
+
+Phase 2 extends the existing infrastructure with security, redundancy, high availability and controlled failure recovery.
+
+The architecture was reorganized from four laptops to three laptops. Mohammed Yaseen was part of the Phase 1 architecture, while Phase 2 operates with Prateek, Sankalp and Sarthak.
+
+The existing responsibilities were redistributed without introducing additional physical machines.
+
+## Updated Team Members and Responsibilities
+
+| Member | IP Address | Responsibility |
+|---|---|---|
+| Prateek | 10.7.28.39 | Primary DNS, Backend A, Standby nginx |
+| Sankalp | 10.7.26.113 | Backup DNS, Main nginx, HTTPS and Load Balancing |
+| Sarthak Mathapati | 10.7.18.197 | Backend B, Test Client and Wireshark |
+
+## Changes from Phase 1
+
+| Component | Phase 1 | Phase 2 |
+|---|---|---|
+| Physical Machines | 4 | 3 |
+| Primary DNS | Sankalp | Prateek |
+| Backup DNS | Not assigned | Sankalp |
+| Main Reverse Proxy | Prateek | Sankalp |
+| Backend A | Yaseen | Prateek |
+| Backend B | Sarthak | Sarthak |
+| Standby nginx | Not assigned | Prateek |
+| Packet Analysis | Sankalp | Sarthak |
+
+## Updated Network Architecture
+
+```text
+                      Client
+                         |
+                  DNS Resolution
+                  /            \
+                 v              v
+           Primary DNS      Backup DNS
+              Prateek         Sankalp
+           10.7.28.39      10.7.26.113
+                         |
+                         v
+                  Main nginx Edge
+                      Sankalp
+                 HTTPS Port 8443
+                         |
+                   Load Balancing
+                   /           \
+                  v             v
+              Backend A      Backend B
+               Prateek        Sarthak
+              Port 3001      Port 3002
+
+               Standby nginx
+                   Prateek
+               HTTPS Port 8443
 ```
 
-`probe` makes six ordinary HTTPS status requests and prints their
-`X-Backend` values. Generate or provision the main-edge certificate/key locally using
-`bash configs/tls/gen-cert.sh`; never copy a private key between hosts. Set
-`EDGE_CA_FILE=/path/to/approved/ca.crt` if the public trust certificate is not
-available at the script's documented default paths.
-Use `reload` and `stop` only for this project-managed main-edge process.
+## Network Configuration
 
-Backend A serves `/`, `/api/status`, and `/api/catalog`. The catalog returns
-`Cache-Control` and `ETag` and responds `304 Not Modified` when passed its
-`If-None-Match` value. Keep Backend A running for Sankalp's integration work.
-The standby proxy uses the existing local certificate if available and does
-not replace Homebrew's global nginx configuration. Homebrew nginx was upgraded
-to 1.31.10, while the active standby process still reports 1.31.6; coordinate
-before restarting it so Sankalp's integration is not interrupted.
+| Parameter | Configuration |
+|---|---|
+| Primary Domain | app.team1.test |
+| Secondary Domain | api.team1.test |
+| Network Interface | en0 |
+| DNS Port | 53 TCP/UDP |
+| HTTP Port | 8080 |
+| HTTPS Port | 8443 |
+| Backend A Port | 3001 |
+| Backend B Port | 3002 |
+| DNS TTL | 30 seconds |
 
-```sh
-./scripts/standby-nginx.sh stop
-./scripts/backend-a-stop.sh
+## Phase 2 Extensions
+
+### Extension A — Backup DNS Resolver
+
+Configured a secondary DNS resolver to provide redundancy during primary DNS failure.
+
+The backup DNS was initially assigned to Sarthak but was subsequently reassigned to Sankalp due to managed macOS firewall restrictions.
+
+Both DNS servers are intended to maintain identical domain records.
+
+**Verification status:** Backup configuration prepared. Correct remote resolution and coordinated DNS failover verification remain pending.
+
+### Extension B — DNS TTL and Cache Management
+
+Configured a DNS TTL of 30 seconds to support controlled DNS record updates and service migration.
+
+The demonstration covers:
+
+- DNS record caching.
+- Controlled record modification.
+- TTL expiration.
+- Manual DNS cache flushing.
+- Updated DNS resolution.
+
+**Verification status:** TTL configuration verified. Controlled expiration and record-change demonstrations remain pending.
+
+### Extension C — Backend Service Isolation
+
+Prepared macOS Packet Filter (PF) firewall rules to restrict unauthorized access to backend services.
+
+The firewall policy is designed to allow backend access from the authorized nginx edge while restricting direct client connections.
+
+Backup and rollback procedures are included to ensure safe configuration restoration.
+
+**Verification status:** Firewall configurations prepared. Activation and verification require administrator authorization.
+
+### Extension D — High Availability
+
+Configured nginx with passive backend failure detection and upstream retry mechanisms.
+
+The demonstration involves:
+
+1. Verifying both backend services.
+2. Stopping Backend A.
+3. Verifying continued service through Backend B.
+4. Restarting Backend A.
+5. Confirming restored load balancing.
+
+**Verification status:** Load balancing and Backend A startup verified. Complete outage-stage evidence remains pending.
+
+### Extension E — Controlled Edge Migration
+
+Configured a standby nginx reverse proxy on Prateek's Mac.
+
+The standby server provides an alternative application entry point through controlled DNS-based migration.
+
+The `X-Edge` response header identifies whether a request is handled by the primary or standby edge.
+
+**Verification status:** Standby nginx verified locally. Complete remote migration testing remains pending.
+
+### Extension F — Systematic Troubleshooting
+
+Established a structured approach to diagnosing network failures.
+
+| Component | Diagnostic Tool |
+|---|---|
+| LAN Connectivity | ping |
+| DNS Resolution | dig |
+| TCP Connectivity | nc |
+| TLS Verification | OpenSSL |
+| HTTP Communication | curl |
+| Packet Analysis | Wireshark |
+
+Implementation challenges include managed firewall restrictions, DNS configuration errors, TLS certificate trust and intermittent backend connectivity.
+
+## Phase 2 Outcome
+
+The infrastructure was successfully reorganized into a three-machine architecture. Core services, backend communication, primary DNS, load balancing and local standby HTTPS have been verified.
+
+Additional resilience configurations have been prepared, with coordinated failure testing and evidence collection required to establish complete Phase 2 functionality.
+
+---
+
+## Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Backend application services |
+| dnsmasq | Private DNS resolution |
+| nginx | Reverse proxy and load balancing |
+| OpenSSL | TLS certificate management |
+| macOS PF | Network security and service isolation |
+| Wireshark | Network packet analysis |
+| curl | HTTP and HTTPS verification |
+| dig | DNS verification |
+| Git and GitHub | Version control |
+
+## Repository Structure
+
+```text
+CN-Project/
+├── backend/
+├── configs/
+│   ├── dns/
+│   ├── edge/
+│   ├── firewall/
+│   └── tls/
+├── scripts/
+├── docs/
+│   ├── phase2/
+│   └── submission/
+├── evidence/
+│   ├── 01-lan/
+│   ├── 02-dns/
+│   ├── 03-lb/
+│   ├── 04-tls/
+│   ├── 05-caching/
+│   ├── 06-wireshark/
+│   ├── 07-failures/
+│   └── phase2/
+│       ├── prateek/
+│       ├── sankalp/
+│       └── sarthak/
+└── README.md
 ```
 
-Stop scripts affect only the project-managed process. Do not stop Backend A
-for an availability demonstration until Sankalp has acknowledged the test.
+## Evidence and Documentation
 
-## Configuration and docs
+The repository preserves Phase 1 evidence separately from Phase 2 evidence.
 
-- [configs/dns/dnsmasq.conf](configs/dns/dnsmasq.conf) and
-  [configs/dns/team.hosts](configs/dns/team.hosts): Prateek's primary DNS
-  template and current project records.
-- [configs/dns/dnsmasq-backup.conf](configs/dns/dnsmasq-backup.conf): Sankalp's
-  backup DNS template.
-- [scripts/backup-dns.sh](scripts/backup-dns.sh): project-local backup DNS
-  config-test/start/status/stop/reload script; start/stop require admin rights.
-- [configs/edge/nginx.conf](configs/edge/nginx.conf): Sankalp's main-edge
-  template with both assigned backend addresses.
-- [scripts/edge-nginx.sh](scripts/edge-nginx.sh): project-specific main-edge
-  validation, lifecycle, upstream, and load-balancing checks for Sankalp.
-- [configs/edge/nginx-standby.conf](configs/edge/nginx-standby.conf): standalone
-  standby proxy on ports 8080/8443.
-- [docs/phase2/tls-setup.md](docs/phase2/tls-setup.md): local certificate setup,
-  trust, and private-key handling.
-- [configs/firewall/backend-pf.conf](configs/firewall/backend-pf.conf):
-  prepared, not activated, Backend A isolation rules.
-- [docs/phase2/prateek-report.md](docs/phase2/prateek-report.md): actual
-  verification results, pending coordination, and extension learning summaries.
-- [docs/phase2/sankalp-report.md](docs/phase2/sankalp-report.md): main-edge
-  integration results and remaining coordination items.
-- [docs/phase2/sarthak-report.md](docs/phase2/sarthak-report.md): Sarthak's
-  pre-reassignment DNS, Backend B, and Wireshark host report.
-- [docs/submission/README.md](docs/submission/README.md): final package map and
-  pending evidence status.
-- [docs/phase2/troubleshooting.md](docs/phase2/troubleshooting.md): DNS/TCP/TLS/HTTP
-  diagnostics.
-- [evidence/phase2/prateek/README.md](evidence/phase2/prateek/README.md):
-  evidence index and screenshot status.
+Evidence formats include:
 
-## Safety and evidence
+- PNG screenshots for practical demonstrations.
+- TXT files for terminal verification logs.
+- Network packet captures for protocol analysis.
+- Markdown documentation for configurations and technical reports.
 
-Never commit private keys, disable the managed firewall, edit system configs
-without a backup, or claim a coordinated failure test succeeded without running
-it with the team. The current local certificate and key are ignored by Git;
-share only a public certificate/CA certificate after approval. Firewall
-activation, DNS failover, TTL mutation, Backend A failure, and edge migration
-are intentionally not run by an individual member.
+## Conclusion
 
-Role-specific terminal logs are stored in
-`evidence/phase2/{prateek,sankalp,sarthak}/logs/` and distinguish each host's
-observations. Screenshots are not synthesized; each role's evidence index lists
-the current status and exact capture commands for remaining screenshots.
+The Private Network Service Platform demonstrates the practical application of computer networking concepts through a locally deployed distributed infrastructure.
+
+Phase 1 established the foundational network using four laptops, while Phase 2 reorganized the system into three laptops and introduced mechanisms for security, redundancy, high availability and controlled recovery.
+
+The project provides practical experience in network architecture, distributed services, secure communication and systematic troubleshooting without relying on external cloud infrastructure.
